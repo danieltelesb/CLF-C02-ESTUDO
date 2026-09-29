@@ -1,0 +1,642 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CLF-C02 | Curso Interativo + Simulado</title>
+<style>
+:root{--bg:#07111f;--panel:#0d1b2d;--panel2:#10243a;--line:#1d3550;--text:#eef5ff;--muted:#9fb0c5;--accent:#ff9900;--accent2:#38bdf8;--ok:#34d399;--bad:#fb7185}
+*{box-sizing:border-box} body{margin:0;background:linear-gradient(180deg,#06101d,#091827 60%,#06101d);color:var(--text);font-family:Inter,Segoe UI,Arial,sans-serif;line-height:1.55}
+a{color:#7dd3fc} button{font:inherit;cursor:pointer}
+.header{position:sticky;top:0;z-index:10;background:rgba(6,16,29,.92);backdrop-filter:blur(14px);border-bottom:1px solid var(--line)}
+.nav{max-width:1400px;margin:auto;padding:14px 22px;display:flex;align-items:center;gap:18px;justify-content:space-between}
+.logo{font-weight:800;letter-spacing:.5px} .logo b{color:var(--accent)} .navlinks{display:flex;gap:8px;flex-wrap:wrap}
+.navlinks button,.ghost{background:transparent;border:1px solid var(--line);color:var(--text);padding:8px 12px;border-radius:9px}
+.hero{max-width:1400px;margin:auto;padding:54px 22px 30px;display:grid;grid-template-columns:1.4fr .6fr;gap:26px}
+.hero h1{font-size:clamp(34px,5vw,62px);line-height:1.02;margin:8px 0 18px} .hero h1 span{color:var(--accent)}
+.hero p{color:var(--muted);font-size:18px;max-width:850px}
+.hero-card,.panel,.module-card,.quiz-card,.result-card{background:linear-gradient(145deg,rgba(16,36,58,.94),rgba(9,25,42,.94));border:1px solid var(--line);border-radius:18px;box-shadow:0 18px 50px rgba(0,0,0,.18)}
+.hero-card{padding:24px} .stat{display:flex;justify-content:space-between;padding:13px 0;border-bottom:1px solid var(--line)} .stat:last-child{border:0}
+.container{max-width:1400px;margin:auto;padding:0 22px 60px}
+.study-sidebar{
+  position:fixed;left:0;top:0;bottom:0;width:250px;z-index:20;
+  background:#07111f;border-right:1px solid #1d3550;padding:22px 18px;
+  overflow-y:auto;box-shadow:10px 0 35px rgba(0,0,0,.18);
+  transition:transform .25s ease, width .25s ease;
+}
+.study-sidebar.collapsed{transform:translateX(-100%)}
+.sidebar-toggle{
+  position:fixed;left:250px;top:88px;z-index:30;width:34px;height:34px;
+  border:1px solid #1d3550;border-radius:0 9px 9px 0;background:#0d1b2d;
+  color:#dbeafe;display:flex;align-items:center;justify-content:center;
+  cursor:pointer;transition:left .25s ease, background .2s ease;
+}
+.sidebar-toggle:hover{background:#102b45}
+.study-sidebar.collapsed + .sidebar-toggle{left:0}
+body.sidebar-hidden .header,
+body.sidebar-hidden .hero,
+body.sidebar-hidden .container,
+body.sidebar-hidden footer{margin-left:0}
+body.sidebar-hidden .hero,
+body.sidebar-hidden .container{max-width:1400px}
+.git-line{display:flex;flex-direction:column;gap:3px}
+.git-day{min-height:49px}
+
+.git-title{font-weight:900;font-size:18px;margin-bottom:4px}
+.git-title span{color:#ff9900}
+.git-subtitle{font-size:11px;color:#71859b;margin-bottom:20px}
+.git-line{position:relative;margin:0 0 3px;padding-left:30px}
+.git-line:before{
+  content:"";position:absolute;left:7px;top:7px;bottom:7px;width:2px;background:#23415e
+}
+.git-day{
+  position:relative;display:flex;align-items:center;gap:9px;
+  min-height:49px;padding:8px 6px 8px 8px;border-radius:8px;
+  color:#8fa5bb;font-size:12px;transition:.15s
+}
+.git-day:before{
+  content:"";position:absolute;left:-28px;top:50%;transform:translateY(-50%);
+  width:10px;height:10px;border-radius:50%;background:#52677d;
+  border:2px solid #07111f;box-sizing:content-box;
+  box-shadow:0 0 0 1px #52677d
+}
+.git-day.active{color:#eef5ff;background:#0d2237}
+.git-day.active:before{background:#34d399;box-shadow:0 0 0 1px #34d399,0 0 10px rgba(52,211,153,.5)}
+.git-day.today:before{background:#ff9900;box-shadow:0 0 0 1px #ff9900,0 0 10px rgba(255,153,0,.5)}
+.git-hash{font-family:ui-monospace,SFMono-Regular,Consolas,monospace;color:#647b91;font-size:10px}
+.git-legend{margin-top:18px;border-top:1px solid #1d3550;padding-top:14px;font-size:10px;color:#71859b}
+.git-legend div{margin:6px 0}
+.git-dot{display:inline-block;width:7px;height:7px;border-radius:50%;margin-right:6px}
+.dot-green{background:#34d399}.dot-orange{background:#ff9900}.dot-gray{background:#52677d}
+@media(max-width:1100px){
+ .study-sidebar{display:none}
+}
+@media(min-width:1101px){
+ .header,.hero,.container,footer{margin-left:250px}
+ .hero,.container{max-width:1150px}
+}
+ section{scroll-margin-top:85px;margin-top:28px}
+.section-title{display:flex;justify-content:space-between;align-items:end;gap:20px;margin:42px 0 18px} h2{font-size:30px;margin:0} .subtitle{color:var(--muted);margin:5px 0 0}
+.search{width:320px;max-width:100%;background:#071525;border:1px solid var(--line);color:white;padding:12px 14px;border-radius:10px}
+.modules{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.module-card{padding:20px;min-height:290px;display:flex;flex-direction:column} .module-num{color:var(--accent);font-weight:800;font-size:13px} .module-card h3{margin:5px 0 10px;font-size:21px} .module-card p{color:var(--muted);font-size:14px} .chips{display:flex;gap:7px;flex-wrap:wrap;margin:8px 0 16px} .chips span{font-size:11px;background:#102b45;border:1px solid #204765;padding:4px 7px;border-radius:999px;color:#c7ddf4}
+.study-btn,.primary{margin-top:auto;border:0;background:linear-gradient(90deg,#ff9900,#ffb84d);color:#17100a;font-weight:800;padding:11px 15px;border-radius:10px}
+.panel{padding:24px} .grid2{display:grid;grid-template-columns:1fr 1fr;gap:18px} .callout{border-left:4px solid var(--accent);background:#0a192a;padding:15px;border-radius:0 10px 10px 0} .table-wrap{overflow:auto} table{width:100%;border-collapse:collapse;min-width:680px} th,td{border-bottom:1px solid var(--line);padding:11px;text-align:left;vertical-align:top} th{color:#ffd18a;background:#0a192a} code,.kbd{background:#071525;border:1px solid var(--line);padding:2px 6px;border-radius:5px;color:#bce7ff}
+#studyView{display:none;margin-top:20px} #studyContent h3{color:#ffd18a} #studyContent li{margin:6px 0;color:#c5d2e2}
+.exam-top{display:flex;gap:12px;flex-wrap:wrap;align-items:center;margin-bottom:18px} .progress{height:9px;background:#071525;border-radius:99px;overflow:hidden;flex:1;min-width:180px} .progress div{height:100%;background:linear-gradient(90deg,#ff9900,#38bdf8);width:0}
+.quiz-card{padding:24px;display:none} .quiz-card.active{display:block} .qnum{color:var(--accent);font-weight:800} .option{display:block;padding:13px;margin:10px 0;background:#0a192a;border:1px solid var(--line);border-radius:10px;cursor:pointer} .option:hover{border-color:#4d7398} .option input{margin-right:10px} .navquiz{display:flex;justify-content:space-between;margin-top:20px;gap:10px} .feedback{margin-top:18px;padding:15px;border-radius:10px;display:none} .feedback.ok{display:block;background:rgba(52,211,153,.1);border:1px solid rgba(52,211,153,.35)} .feedback.bad{display:block;background:rgba(251,113,133,.1);border:1px solid rgba(251,113,133,.35)} .result-card{padding:28px;display:none;text-align:center} .score{font-size:58px;font-weight:900;color:var(--accent)} .review{margin-top:20px;text-align:left} .review-item{padding:15px;border-top:1px solid var(--line)} .correct{color:var(--ok)} .wrong{color:var(--bad)}
+.checklist{display:grid;grid-template-columns:repeat(2,1fr);gap:10px} label.check{display:flex;gap:10px;background:#0a192a;padding:12px;border:1px solid var(--line);border-radius:9px} footer{border-top:1px solid var(--line);padding:30px 22px;color:var(--muted);text-align:center}
+@media(max-width:1000px){.hero,.grid2{grid-template-columns:1fr}.modules{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:650px){.modules,.checklist{grid-template-columns:1fr}.navlinks{display:none}.hero{padding-top:35px}}
+</style>
+</head>
+<body>
+<aside class="study-sidebar" id="studySidebar">
+  <div class="git-title">study <span>timeline</span></div>
+  <div class="git-subtitle">ESTILO GIT • HISTÓRICO DE ESTUDOS</div>
+  <div id="gitTimeline" class="git-line"></div>
+  <div class="git-legend">
+    <div><span class="git-dot dot-green"></span>dia em que você estudou</div>
+    <div><span class="git-dot dot-orange"></span>hoje</div>
+    <div><span class="git-dot dot-gray"></span>ainda não estudado</div>
+  </div>
+</aside>
+<button class="sidebar-toggle" id="sidebarToggle" onclick="toggleSidebar()" aria-label="Ocultar barra lateral" title="Ocultar barra lateral">‹</button>
+
+<header class="header"><div class="nav">
+  <div class="logo">AWS <b>CLF-C02</b> LAB</div>
+  <div class="navlinks">
+    <button onclick="scrollToId('curso')">Estudos</button>
+    <button onclick="scrollToId('comparacoes')">Comparações</button>
+    <button onclick="scrollToId('simulado')">Simulado</button>
+    <button onclick="scrollToId('checklist')">Checklist</button>
+  </div>
+</div></header>
+
+<main>
+<section class="hero">
+  <div>
+    <div class="module-num">CURSO INTERATIVO • AWS CERTIFIED CLOUD PRACTITIONER</div>
+    <h1>Prepare-se para a <span>CLF-C02</span></h1>
+    <p>Material organizado a partir do conteúdo fornecido: trilha de estudos, comparações de serviços, pegadinhas, checklist e um simulado interativo de 65 questões.</p>
+    <button class="primary" onclick="scrollToId('simulado')">Começar simulado</button>
+  </div>
+  <div class="hero-card">
+    <div class="stat"><span>Módulos</span><strong>14</strong></div>
+    <div class="stat"><span>Questões</span><strong>65</strong></div>
+    <div class="stat"><span>Formato</span><strong>Interativo</strong></div>
+    <div class="stat"><span>Idioma</span><strong>PT-BR</strong></div>
+  </div>
+</section>
+
+<div class="container">
+<section id="curso">
+  <div class="section-title"><div><h2>Sessões de estudo</h2><p class="subtitle">Clique em qualquer módulo para abrir um guia rápido e orientado para prova.</p></div><input id="search" class="search" placeholder="Pesquisar módulo ou serviço..." oninput="filterModules(this.value)"></div>
+  <div class="modules" id="moduleGrid"><article class="module-card" data-search="cloud concepts conceitos de nuvem, elasticidade, escalabilidade, alta disponibilidade, tolerância a falhas, dr, capex/opex e shared responsibility model. cloud computing elasticidade × escalabilidade alta disponibilidade × tolerância a falhas capex × opex regions × availability zones shared responsibility model">
+      <div class="module-num">01</div>
+      <h3>Cloud Concepts</h3>
+      <p>Conceitos de nuvem, elasticidade, escalabilidade, alta disponibilidade, tolerância a falhas, DR, CapEx/OpEx e Shared Responsibility Model.</p>
+      <div class="chips"><span>Cloud computing</span><span>Elasticidade × escalabilidade</span><span>Alta disponibilidade × tolerância a falhas</span><span>CapEx × OpEx</span><span>Regions × Availability Zones</span></div>
+      <button class="study-btn" onclick="openModule('01')">Estudar módulo</button>
+    </article>
+<article class="module-card" data-search="global infrastructure regions, availability zones, local zones, wavelength zones, edge locations, points of presence, outposts, cloudfront e global accelerator. region availability zone local zone wavelength zone edge location point of presence outposts cloudfront global accelerator">
+      <div class="module-num">02</div>
+      <h3>Global Infrastructure</h3>
+      <p>Regions, Availability Zones, Local Zones, Wavelength Zones, Edge Locations, Points of Presence, Outposts, CloudFront e Global Accelerator.</p>
+      <div class="chips"><span>Region</span><span>Availability Zone</span><span>Local Zone</span><span>Wavelength Zone</span><span>Edge Location</span></div>
+      <button class="study-btn" onclick="openModule('02')">Estudar módulo</button>
+    </article>
+<article class="module-card" data-search="iam &amp; security iam, users, groups, roles, policies, least privilege, mfa, sts, identity center, organizations, scps, kms, secrets manager e serviços de proteção/monitoramento. iam user × role authentication × authorization iam policy × scp kms × secrets manager waf × shield guardduty × inspector cloudtrail × cloudwatch security group × nacl">
+      <div class="module-num">03</div>
+      <h3>IAM &amp; Security</h3>
+      <p>IAM, Users, Groups, Roles, Policies, least privilege, MFA, STS, Identity Center, Organizations, SCPs, KMS, Secrets Manager e serviços de proteção/monitoramento.</p>
+      <div class="chips"><span>IAM User × Role</span><span>Authentication × Authorization</span><span>IAM Policy × SCP</span><span>KMS × Secrets Manager</span><span>WAF × Shield</span></div>
+      <button class="study-btn" onclick="openModule('03')">Estudar módulo</button>
+    </article>
+<article class="module-card" data-search="compute ec2, ami, tipos de instância, ebs, instance store, security groups, auto scaling, elb, modelos de compra, containers e serverless. on-demand reserved instances savings plans spot ecs eks fargate ecr lambda api gateway step functions">
+      <div class="module-num">04</div>
+      <h3>Compute</h3>
+      <p>EC2, AMI, tipos de instância, EBS, Instance Store, Security Groups, Auto Scaling, ELB, modelos de compra, containers e serverless.</p>
+      <div class="chips"><span>On-Demand</span><span>Reserved Instances</span><span>Savings Plans</span><span>Spot</span><span>ECS</span></div>
+      <button class="study-btn" onclick="openModule('04')">Estudar módulo</button>
+    </article>
+<article class="module-card" data-search="storage s3 e suas classes, versioning, lifecycle, replication, encryption, glacier, presigned urls, ebs, efs e instance store. s3 s3 storage classes ebs efs instance store ebs × efs × s3">
+      <div class="module-num">05</div>
+      <h3>Storage</h3>
+      <p>S3 e suas classes, versioning, lifecycle, replication, encryption, Glacier, presigned URLs, EBS, EFS e Instance Store.</p>
+      <div class="chips"><span>S3</span><span>S3 Storage Classes</span><span>EBS</span><span>EFS</span><span>Instance Store</span></div>
+      <button class="study-btn" onclick="openModule('05')">Estudar módulo</button>
+    </article>
+<article class="module-card" data-search="databases rds, aurora, dynamodb, elasticache, redshift, neptune e documentdb, incluindo os principais modelos de banco. relacional nosql key-value document graph data warehouse in-memory">
+      <div class="module-num">06</div>
+      <h3>Databases</h3>
+      <p>RDS, Aurora, DynamoDB, ElastiCache, Redshift, Neptune e DocumentDB, incluindo os principais modelos de banco.</p>
+      <div class="chips"><span>Relacional</span><span>NoSQL</span><span>Key-value</span><span>Document</span><span>Graph</span></div>
+      <button class="study-btn" onclick="openModule('06')">Estudar módulo</button>
+    </article>
+<article class="module-card" data-search="networking vpc, subnets, route tables, internet gateway, nat gateway, security groups, nacl, peering, transit gateway, endpoints, vpn, direct connect, route 53, cloudfront e global accelerator. public × private subnet igw × nat gateway nat gateway × vpc endpoint vpc peering × transit gateway vpn × direct connect route 53 × cloudfront">
+      <div class="module-num">07</div>
+      <h3>Networking</h3>
+      <p>VPC, subnets, route tables, Internet Gateway, NAT Gateway, Security Groups, NACL, peering, Transit Gateway, endpoints, VPN, Direct Connect, Route 53, CloudFront e Global Accelerator.</p>
+      <div class="chips"><span>Public × Private subnet</span><span>IGW × NAT Gateway</span><span>NAT Gateway × VPC Endpoint</span><span>VPC Peering × Transit Gateway</span><span>VPN × Direct Connect</span></div>
+      <button class="study-btn" onclick="openModule('07')">Estudar módulo</button>
+    </article>
+<article class="module-card" data-search="application integration sqs, sns, eventbridge, step functions, amazon mq, filas, mensagens, publishers, subscribers, fan-out, desacoplamento e arquitetura orientada a eventos. sqs × sns sns × eventbridge sqs × eventbridge step functions × eventbridge queue fan-out decoupling">
+      <div class="module-num">08</div>
+      <h3>Application Integration</h3>
+      <p>SQS, SNS, EventBridge, Step Functions, Amazon MQ, filas, mensagens, publishers, subscribers, fan-out, desacoplamento e arquitetura orientada a eventos.</p>
+      <div class="chips"><span>SQS × SNS</span><span>SNS × EventBridge</span><span>SQS × EventBridge</span><span>Step Functions × EventBridge</span><span>Queue</span></div>
+      <button class="study-btn" onclick="openModule('08')">Estudar módulo</button>
+    </article>
+<article class="module-card" data-search="monitoring &amp; governance cloudwatch, cloudtrail, config, trusted advisor, organizations, control tower, health dashboard e systems manager. cloudwatch cloudtrail aws config trusted advisor aws organizations control tower service health × personal health">
+      <div class="module-num">09</div>
+      <h3>Monitoring &amp; Governance</h3>
+      <p>CloudWatch, CloudTrail, Config, Trusted Advisor, Organizations, Control Tower, Health Dashboard e Systems Manager.</p>
+      <div class="chips"><span>CloudWatch</span><span>CloudTrail</span><span>AWS Config</span><span>Trusted Advisor</span><span>AWS Organizations</span></div>
+      <button class="study-btn" onclick="openModule('09')">Estudar módulo</button>
+    </article>
+<article class="module-card" data-search="billing &amp; cost management pricing calculator, cost explorer, budgets, billing, cur, organizations, consolidated billing, tags, rightsizing e modelos de preço. pricing calculator cost explorer aws budgets cur consolidated billing cost allocation tags rightsizing">
+      <div class="module-num">10</div>
+      <h3>Billing &amp; Cost Management</h3>
+      <p>Pricing Calculator, Cost Explorer, Budgets, Billing, CUR, Organizations, consolidated billing, tags, rightsizing e modelos de preço.</p>
+      <div class="chips"><span>Pricing Calculator</span><span>Cost Explorer</span><span>AWS Budgets</span><span>CUR</span><span>Consolidated Billing</span></div>
+      <button class="study-btn" onclick="openModule('10')">Estudar módulo</button>
+    </article>
+<article class="module-card" data-search="well-architected framework os seis pilares e como reconhecer o pilar mais relacionado a um cenário. operational excellence security reliability performance efficiency cost optimization sustainability">
+      <div class="module-num">11</div>
+      <h3>Well-Architected Framework</h3>
+      <p>Os seis pilares e como reconhecer o pilar mais relacionado a um cenário.</p>
+      <div class="chips"><span>Operational Excellence</span><span>Security</span><span>Reliability</span><span>Performance Efficiency</span><span>Cost Optimization</span></div>
+      <button class="study-btn" onclick="openModule('11')">Estudar módulo</button>
+    </article>
+<article class="module-card" data-search="support &amp; cloud adoption support center, planos de suporte, trusted advisor, health dashboard, re:post, knowledge center, migration hub, application migration service, dms, snow family, datasync, transfer family e caf. support plans migration hub application migration service dms snow family datasync transfer family 6 rs">
+      <div class="module-num">12</div>
+      <h3>Support &amp; Cloud Adoption</h3>
+      <p>Support Center, planos de suporte, Trusted Advisor, Health Dashboard, re:Post, Knowledge Center, Migration Hub, Application Migration Service, DMS, Snow Family, DataSync, Transfer Family e CAF.</p>
+      <div class="chips"><span>Support Plans</span><span>Migration Hub</span><span>Application Migration Service</span><span>DMS</span><span>Snow Family</span></div>
+      <button class="study-btn" onclick="openModule('12')">Estudar módulo</button>
+    </article>
+<article class="module-card" data-search="ai/ml &amp; outros serviços sagemaker, bedrock, rekognition, textract, transcribe, translate, comprehend, polly e serviços adicionais frequentes na preparação. sagemaker bedrock rekognition textract transcribe translate comprehend polly">
+      <div class="module-num">13</div>
+      <h3>AI/ML &amp; Outros Serviços</h3>
+      <p>SageMaker, Bedrock, Rekognition, Textract, Transcribe, Translate, Comprehend, Polly e serviços adicionais frequentes na preparação.</p>
+      <div class="chips"><span>SageMaker</span><span>Bedrock</span><span>Rekognition</span><span>Textract</span><span>Transcribe</span></div>
+      <button class="study-btn" onclick="openModule('13')">Estudar módulo</button>
+    </article>
+<article class="module-card" data-search="pegadinhas &amp; revisão revisão orientada por diferenças conceituais e palavras-chave de enunciados. s3 × ebs ebs × efs sqs × sns cloudwatch × cloudtrail ec2 × lambda ecs × eks region × az backup × dr">
+      <div class="module-num">14</div>
+      <h3>Pegadinhas &amp; Revisão</h3>
+      <p>Revisão orientada por diferenças conceituais e palavras-chave de enunciados.</p>
+      <div class="chips"><span>S3 × EBS</span><span>EBS × EFS</span><span>SQS × SNS</span><span>CloudWatch × CloudTrail</span><span>EC2 × Lambda</span></div>
+      <button class="study-btn" onclick="openModule('14')">Estudar módulo</button>
+    </article></div>
+  <div id="studyView" class="panel">
+    <div style="display:flex;justify-content:space-between;gap:10px;align-items:center"><div><div class="module-num" id="studyNum"></div><h2 id="studyTitle"></h2></div><button class="ghost" onclick="closeModule()">Fechar</button></div>
+    <div id="studyContent"></div>
+  </div>
+</section>
+
+<section id="comparacoes">
+  <div class="section-title"><div><h2>Comparações essenciais</h2><p class="subtitle">Use estas diferenças como revisão rápida antes do simulado.</p></div></div>
+  <div class="panel table-wrap">
+  <table>
+    <thead><tr><th>Comparação</th><th>Serviço/conceito A</th><th>Serviço/conceito B</th><th>Como reconhecer</th></tr></thead>
+    <tbody>
+      <tr><td>EBS × EFS × S3</td><td>EBS = bloco</td><td>EFS = arquivo; S3 = objetos</td><td>Pense no tipo de armazenamento solicitado.</td></tr>
+      <tr><td>SQS × SNS</td><td>SQS = fila</td><td>SNS = publicação/assinatura</td><td>Um consumidor processando mensagens → SQS; vários assinantes/fan-out → SNS.</td></tr>
+      <tr><td>CloudWatch × CloudTrail</td><td>Monitoramento e logs</td><td>Auditoria de atividade/API</td><td>Métrica/alarme → CloudWatch; quem fez o quê → CloudTrail.</td></tr>
+      <tr><td>IAM Role × User</td><td>Identidade assumível, credenciais temporárias</td><td>Identidade persistente</td><td>Acesso temporário/serviço → Role.</td></tr>
+      <tr><td>Security Group × NACL</td><td>Firewall stateful</td><td>Controle em nível de subnet</td><td>SG acompanha conexões; NACL atua na subnet.</td></tr>
+      <tr><td>EC2 × Lambda</td><td>Servidor/instância gerenciada pelo cliente</td><td>Função serverless orientada a eventos</td><td>Precisa controlar o servidor → EC2; código por evento → Lambda.</td></tr>
+      <tr><td>RDS × DynamoDB</td><td>Relacional</td><td>NoSQL</td><td>SQL/relacionamentos → RDS; key-value/document → DynamoDB.</td></tr>
+      <tr><td>VPN × Direct Connect</td><td>Conexão por VPN</td><td>Conexão dedicada</td><td>Canal dedicado entre ambiente on-premises e AWS → Direct Connect.</td></tr>
+      <tr><td>Route 53 × CloudFront</td><td>DNS</td><td>CDN/distribuição de conteúdo</td><td>Domínio/DNS → Route 53; conteúdo/cache global → CloudFront.</td></tr>
+      <tr><td>Region × AZ</td><td>Área geográfica da AWS</td><td>Local isolado dentro da Region</td><td>Uma Region contém múltiplas AZs.</td></tr>
+    </tbody>
+  </table>
+  </div>
+</section>
+
+<section id="simulado">
+  <div class="section-title"><div><h2>Simulado CLF-C02</h2><p class="subtitle">65 questões • uma alternativa correta • resultado e revisão ao final.</p></div></div>
+  <div class="panel">
+    <div class="exam-top">
+      <strong id="counter">Questão 1 de 65</strong>
+      <div class="progress"><div id="bar"></div></div>
+      <strong id="liveScore">Acertos: 0</strong>
+    </div>
+    <div id="quiz"></div>
+    <div id="result" class="result-card"></div>
+  </div>
+</section>
+
+<section id="checklist">
+  <div class="section-title"><div><h2>Checklist: estou pronto para a CLF-C02?</h2><p class="subtitle">Marque os assuntos que você consegue explicar sem consultar material.</p></div></div>
+  <div class="checklist">
+    <label class="check"><input type="checkbox"> Sei explicar IAM e least privilege</label>
+    <label class="check"><input type="checkbox"> Sei diferenciar SQS e SNS</label>
+    <label class="check"><input type="checkbox"> Sei diferenciar EBS, EFS e S3</label>
+    <label class="check"><input type="checkbox"> Sei explicar Region e Availability Zone</label>
+    <label class="check"><input type="checkbox"> Sei explicar Shared Responsibility Model</label>
+    <label class="check"><input type="checkbox"> Sei diferenciar CloudWatch e CloudTrail</label>
+    <label class="check"><input type="checkbox"> Sei explicar EC2 e seus modelos de compra</label>
+    <label class="check"><input type="checkbox"> Sei explicar Lambda, ECS, EKS e Fargate</label>
+    <label class="check"><input type="checkbox"> Sei explicar RDS, Aurora e DynamoDB</label>
+    <label class="check"><input type="checkbox"> Sei explicar VPC, subnet, IGW e NAT Gateway</label>
+    <label class="check"><input type="checkbox"> Sei diferenciar Security Group e NACL</label>
+    <label class="check"><input type="checkbox"> Sei identificar serviços de segurança</label>
+    <label class="check"><input type="checkbox"> Sei identificar ferramentas de custos</label>
+    <label class="check"><input type="checkbox"> Sei explicar os seis pilares do Well-Architected</label>
+    <label class="check"><input type="checkbox"> Sei reconhecer os 6 Rs de migração</label>
+    <label class="check"><input type="checkbox"> Sei escolher serviços de AI/ML por caso de uso</label>
+    <label class="check"><input type="checkbox"> Sei identificar quando usar S3 Glacier e outras classes</label>
+    <label class="check"><input type="checkbox"> Consigo resolver cenários sem decorar apenas definições</label>
+  </div>
+</section>
+
+<section id="plano">
+  <div class="section-title"><div><h2>Plano rápido de estudos</h2><p class="subtitle">Uma estrutura prática baseada nos tópicos do material.</p></div></div>
+  <div class="grid2">
+    <div class="panel"><h3>7 dias</h3><ol>
+      <li>Dia 1: Cloud Concepts + Global Infrastructure</li><li>Dia 2: IAM + Security</li><li>Dia 3: Compute + Serverless</li><li>Dia 4: Storage + Databases</li><li>Dia 5: Networking + Integration</li><li>Dia 6: Monitoring + Billing + Well-Architected</li><li>Dia 7: Pegadinhas + simulado + revisão dos erros</li>
+    </ol></div>
+    <div class="panel"><h3>30 dias</h3><p>Distribua os 14 módulos ao longo das semanas, reserve blocos para comparações e faça revisões cumulativas. Use o simulado para descobrir quais conceitos precisam voltar para a trilha de estudo.</p></div>
+  </div>
+</section>
+</div>
+</main>
+
+<footer>
+  Material interativo baseado no conteúdo fornecido para preparação da AWS Certified Cloud Practitioner (CLF-C02). <br>
+  Referências oficiais sugeridas: <a href="https://aws.amazon.com/documentation/" target="_blank">AWS Documentation</a> •
+  <a href="https://aws.amazon.com/certification/certified-cloud-practitioner/" target="_blank">AWS Certified Cloud Practitioner</a> •
+  <a href="https://explore.skillbuilder.aws/" target="_blank">AWS Skill Builder</a> •
+  <a href="https://docs.aws.amazon.com/wellarchitected/latest/framework/welcome.html" target="_blank">Well-Architected Framework</a>
+</footer>
+
+<script>
+const questions = [{"q": "Uma empresa quer pagar pelos recursos de computação conforme o consumo, evitando grande investimento inicial em hardware. Qual conceito melhor descreve esse modelo?", "options": ["CapEx", "OpEx", "Economia de escala", "Tolerância a falhas"], "answer": "B", "explanation": "OpEx transforma gastos de infraestrutura em despesas operacionais variáveis conforme o uso."}, {"q": "Uma aplicação precisa aumentar e diminuir sua capacidade automaticamente conforme a demanda. Qual conceito está mais diretamente relacionado?", "options": ["Elasticidade", "Durabilidade", "Latência", "Governança"], "answer": "A", "explanation": "Elasticidade é a capacidade de ajustar recursos de acordo com a demanda."}, {"q": "Qual componente da infraestrutura global da AWS é formado por uma ou mais instalações físicas isoladas dentro de uma Region?", "options": ["Edge Location", "Availability Zone", "Local Zone", "Wavelength Zone"], "answer": "B", "explanation": "Availability Zones são locais isolados dentro de uma Region."}, {"q": "Qual serviço é usado principalmente para distribuir conteúdo com baixa latência por uma rede global de pontos de presença?", "options": ["Amazon Route 53", "Amazon CloudFront", "AWS Direct Connect", "Amazon RDS"], "answer": "B", "explanation": "CloudFront é a CDN da AWS e usa uma rede global de edge locations."}, {"q": "Uma aplicação precisa de uma identidade temporária para acessar recursos AWS sem armazenar credenciais permanentes no código. Qual recurso é mais apropriado?", "options": ["IAM Role", "IAM Group", "IAM User", "Access key fixa"], "answer": "A", "explanation": "IAM Roles fornecem credenciais temporárias por meio de serviços como STS."}, {"q": "Qual princípio de segurança recomenda conceder somente as permissões necessárias para realizar uma tarefa?", "options": ["Defense in depth", "Least privilege", "Shared tenancy", "Fault tolerance"], "answer": "B", "explanation": "Least privilege reduz permissões ao mínimo necessário."}, {"q": "Uma empresa quer registrar chamadas de API e ações realizadas na conta AWS para auditoria. Qual serviço deve ser usado?", "options": ["CloudWatch", "CloudTrail", "AWS Config", "Trusted Advisor"], "answer": "B", "explanation": "CloudTrail registra atividade de API e eventos relacionados."}, {"q": "Qual serviço fornece métricas, logs e alarmes para monitoramento operacional?", "options": ["CloudWatch", "CloudTrail", "IAM", "AWS Organizations"], "answer": "A", "explanation": "CloudWatch é voltado ao monitoramento de métricas, logs e alarmes."}, {"q": "Qual serviço oferece máquinas virtuais configuráveis na AWS?", "options": ["Amazon EC2", "AWS Lambda", "Amazon S3", "Amazon SQS"], "answer": "A", "explanation": "EC2 fornece capacidade computacional baseada em instâncias virtuais."}, {"q": "Qual modelo de compra é adequado quando a carga é variável e não há compromisso de longo prazo?", "options": ["Spot obrigatório", "On-Demand", "Reserved Instance obrigatória", "Savings Plan obrigatório"], "answer": "B", "explanation": "On-Demand é indicado quando flexibilidade é prioridade e não há compromisso."}, {"q": "Qual opção pode oferecer grande desconto para cargas que podem ser interrompidas?", "options": ["Spot Instances", "On-Demand", "Dedicated Hosts", "Elastic IP"], "answer": "A", "explanation": "Spot usa capacidade excedente da AWS e pode sofrer interrupções."}, {"q": "Qual serviço é um armazenamento de objetos?", "options": ["Amazon S3", "Amazon EBS", "Amazon EFS", "Amazon EC2"], "answer": "A", "explanation": "S3 é armazenamento de objetos."}, {"q": "Uma empresa precisa compartilhar um sistema de arquivos entre várias instâncias Linux. Qual serviço é mais apropriado?", "options": ["Amazon EFS", "Amazon S3", "Amazon EBS", "Instance Store"], "answer": "A", "explanation": "EFS fornece armazenamento de arquivos compartilhável via NFS."}, {"q": "Qual característica diferencia o EBS do S3?", "options": ["EBS é object storage global", "EBS fornece volumes de bloco para instâncias", "EBS é uma CDN", "EBS é uma fila"], "answer": "B", "explanation": "EBS é armazenamento de blocos normalmente associado a EC2."}, {"q": "Qual classe do S3 é projetada para dados acessados com frequência?", "options": ["S3 Standard", "S3 Glacier Deep Archive", "S3 One Zone-IA", "S3 Glacier Flexible Retrieval"], "answer": "A", "explanation": "S3 Standard é a classe de uso geral para acesso frequente."}, {"q": "Qual serviço é um banco relacional gerenciado?", "options": ["Amazon RDS", "Amazon DynamoDB", "Amazon ElastiCache", "Amazon S3"], "answer": "A", "explanation": "RDS é um serviço gerenciado para bancos relacionais."}, {"q": "Qual serviço é um banco NoSQL de chave-valor e documentos?", "options": ["Amazon DynamoDB", "Amazon RDS", "Amazon Redshift", "Amazon Neptune"], "answer": "A", "explanation": "DynamoDB é um banco NoSQL gerenciado com modelos key-value e document."}, {"q": "Uma empresa precisa de um data warehouse analítico. Qual serviço atende diretamente esse caso?", "options": ["Amazon Redshift", "Amazon RDS", "Amazon DynamoDB", "Amazon EFS"], "answer": "A", "explanation": "Redshift é o serviço de data warehouse da AWS."}, {"q": "Qual serviço é destinado a bancos de dados em memória/cache?", "options": ["Amazon ElastiCache", "Amazon Redshift", "Amazon Neptune", "Amazon S3"], "answer": "A", "explanation": "ElastiCache fornece caches gerenciados em memória."}, {"q": "Qual componente permite que recursos em uma subnet privada saiam para a internet sem aceitar conexões iniciadas diretamente da internet?", "options": ["Internet Gateway", "NAT Gateway", "Route 53", "VPC Peering"], "answer": "B", "explanation": "NAT Gateway permite saída para a internet a partir de recursos privados, quando configurado adequadamente."}, {"q": "Qual é uma característica típica de Security Groups?", "options": ["São stateful", "São aplicados somente a roteadores", "Não possuem regras", "São serviços de DNS"], "answer": "A", "explanation": "Security Groups são stateful e atuam como firewall virtual para recursos como EC2."}, {"q": "Qual serviço fornece DNS gerenciado?", "options": ["Amazon Route 53", "Amazon CloudFront", "AWS WAF", "AWS Shield"], "answer": "A", "explanation": "Route 53 fornece DNS e recursos relacionados a tráfego e domínio."}, {"q": "Uma arquitetura precisa desacoplar produtores e consumidores usando uma fila. Qual serviço é o mais direto?", "options": ["Amazon SQS", "Amazon SNS", "Amazon Route 53", "Amazon CloudFront"], "answer": "A", "explanation": "SQS fornece filas para desacoplamento entre componentes."}, {"q": "Uma aplicação precisa enviar uma mensagem para vários assinantes. Qual padrão é atendido diretamente pelo SNS?", "options": ["Fan-out", "Block storage", "DNS failover", "Object lifecycle"], "answer": "A", "explanation": "SNS pode publicar uma mensagem para múltiplos subscribers, implementando fan-out."}, {"q": "Qual serviço permite reagir a eventos de diferentes fontes usando regras e destinos?", "options": ["Amazon EventBridge", "Amazon EBS", "Amazon EFS", "Amazon Inspector"], "answer": "A", "explanation": "EventBridge é um barramento de eventos para arquiteturas orientadas a eventos."}, {"q": "Qual serviço fornece funções serverless executadas em resposta a eventos?", "options": ["AWS Lambda", "Amazon EC2", "Amazon EBS", "Amazon RDS"], "answer": "A", "explanation": "Lambda executa código sem que o cliente gerencie servidores."}, {"q": "Qual serviço é usado para orquestrar workflows com estados?", "options": ["AWS Step Functions", "Amazon SQS", "Amazon S3", "Amazon Route 53"], "answer": "A", "explanation": "Step Functions coordena workflows por meio de máquinas de estado."}, {"q": "Qual ferramenta ajuda a estimar o custo de uma arquitetura antes da implementação?", "options": ["AWS Pricing Calculator", "AWS Cost Explorer", "AWS Budgets", "AWS CloudTrail"], "answer": "A", "explanation": "Pricing Calculator estima custos de arquiteturas e serviços."}, {"q": "Qual ferramenta permite analisar gastos históricos e tendências de custo?", "options": ["Cost Explorer", "Pricing Calculator", "IAM", "AWS Config"], "answer": "A", "explanation": "Cost Explorer permite visualizar e analisar custos e uso."}, {"q": "Qual serviço pode emitir alertas quando o gasto ou uso ultrapassa um limite definido?", "options": ["AWS Budgets", "Amazon GuardDuty", "CloudTrail", "Route 53"], "answer": "A", "explanation": "AWS Budgets permite criar orçamentos e alertas."}, {"q": "Qual pilar do Well-Architected Framework trata diretamente da proteção de dados e sistemas?", "options": ["Security", "Sustainability", "Cost Optimization", "Performance Efficiency"], "answer": "A", "explanation": "Security é o pilar dedicado à proteção da informação e dos sistemas."}, {"q": "Qual pilar enfatiza capacidade de executar workloads de maneira eficiente, evoluindo processos e operações?", "options": ["Operational Excellence", "Security", "Sustainability", "Cost Optimization"], "answer": "A", "explanation": "Operational Excellence trata da execução e melhoria contínua das operações."}, {"q": "Qual pilar se concentra em recuperar-se de falhas e atender requisitos de disponibilidade?", "options": ["Reliability", "Cost Optimization", "Security", "Sustainability"], "answer": "A", "explanation": "Reliability trata de recuperação, resiliência e atendimento consistente às demandas."}, {"q": "Qual serviço ajuda a detectar atividades potencialmente maliciosas e ameaças na conta AWS?", "options": ["Amazon GuardDuty", "Amazon Polly", "Amazon Redshift", "Amazon EFS"], "answer": "A", "explanation": "GuardDuty é um serviço gerenciado de detecção de ameaças."}, {"q": "Qual serviço ajuda a avaliar vulnerabilidades de workloads?", "options": ["Amazon Inspector", "Amazon GuardDuty", "Amazon Route 53", "AWS Budgets"], "answer": "A", "explanation": "Inspector é voltado à avaliação de vulnerabilidades em workloads suportados."}, {"q": "Qual serviço ajuda a proteger aplicações web contra ataques em nível de aplicação?", "options": ["AWS WAF", "AWS Shield", "AWS KMS", "AWS STS"], "answer": "A", "explanation": "WAF permite regras para filtrar e controlar tráfego HTTP(S) de aplicações."}, {"q": "Qual serviço fornece proteção gerenciada contra ataques DDoS?", "options": ["AWS Shield", "AWS WAF", "Amazon Inspector", "IAM"], "answer": "A", "explanation": "Shield é o serviço de proteção contra DDoS da AWS."}, {"q": "Qual serviço gerencia chaves criptográficas?", "options": ["AWS KMS", "AWS Secrets Manager", "AWS CloudTrail", "Amazon Macie"], "answer": "A", "explanation": "KMS gerencia chaves usadas para criptografia."}, {"q": "Qual serviço é voltado ao armazenamento e gerenciamento de segredos como credenciais?", "options": ["AWS Secrets Manager", "AWS KMS", "Amazon S3", "CloudWatch"], "answer": "A", "explanation": "Secrets Manager armazena, recupera e pode ajudar a rotacionar segredos."}, {"q": "Qual serviço fornece Kubernetes gerenciado?", "options": ["Amazon EKS", "Amazon ECS", "AWS Fargate", "Amazon ECR"], "answer": "A", "explanation": "EKS é o serviço gerenciado de Kubernetes."}, {"q": "Qual serviço é o registry de imagens de containers da AWS?", "options": ["Amazon ECR", "Amazon ECS", "Amazon EKS", "AWS Lambda"], "answer": "A", "explanation": "ECR armazena e gerencia imagens de containers."}, {"q": "Qual opção permite executar containers sem gerenciar servidores?", "options": ["AWS Fargate", "Amazon ECR", "Amazon Route 53", "Amazon EBS"], "answer": "A", "explanation": "Fargate é uma tecnologia serverless para execução de containers em ECS/EKS."}, {"q": "Qual serviço fornece um container orchestration service nativo da AWS?", "options": ["Amazon ECS", "Amazon ECR", "Amazon RDS", "Amazon SQS"], "answer": "A", "explanation": "ECS é o serviço de orquestração de containers da AWS."}, {"q": "Qual serviço de IA pode extrair texto de documentos e imagens?", "options": ["Amazon Textract", "Amazon Polly", "Amazon Transcribe", "Amazon Translate"], "answer": "A", "explanation": "Textract extrai texto e dados de documentos."}, {"q": "Qual serviço converte fala em texto?", "options": ["Amazon Transcribe", "Amazon Polly", "Amazon Textract", "Amazon Translate"], "answer": "A", "explanation": "Transcribe realiza speech-to-text."}, {"q": "Qual serviço converte texto em fala?", "options": ["Amazon Polly", "Amazon Transcribe", "Amazon Comprehend", "Amazon Rekognition"], "answer": "A", "explanation": "Polly realiza text-to-speech."}, {"q": "Qual serviço fornece modelos fundacionais e recursos para aplicações generativas de IA?", "options": ["Amazon Bedrock", "Amazon Redshift", "Amazon Neptune", "Amazon EFS"], "answer": "A", "explanation": "Bedrock oferece acesso a modelos fundacionais por APIs gerenciadas."}, {"q": "Qual serviço é voltado à criação, treinamento e implantação de modelos de machine learning?", "options": ["Amazon SageMaker", "Amazon Bedrock", "Amazon Polly", "Amazon SQS"], "answer": "A", "explanation": "SageMaker é a plataforma de ML da AWS."}, {"q": "Qual serviço é usado para conectar uma VPC a uma rede on-premises por uma conexão dedicada?", "options": ["AWS Direct Connect", "NAT Gateway", "Internet Gateway", "VPC Peering"], "answer": "A", "explanation": "Direct Connect fornece conectividade dedicada entre ambientes e AWS."}, {"q": "Qual opção conecta VPCs diretamente por uma conexão de rede entre elas?", "options": ["VPC Peering", "CloudFront", "Route 53", "AWS WAF"], "answer": "A", "explanation": "VPC Peering estabelece conectividade privada entre VPCs."}, {"q": "Qual serviço simplifica a conexão de múltiplas VPCs e redes por um hub central?", "options": ["AWS Transit Gateway", "VPC Peering", "NAT Gateway", "Internet Gateway"], "answer": "A", "explanation": "Transit Gateway funciona como hub para conectar VPCs e redes."}, {"q": "Qual mecanismo fornece conectividade privada a serviços AWS sem precisar atravessar a internet pública?", "options": ["VPC Endpoint", "Internet Gateway", "Elastic IP", "CloudFront"], "answer": "A", "explanation": "VPC Endpoints permitem acesso privado a serviços suportados."}, {"q": "Qual serviço fornece auditoria de configurações e avaliação de conformidade de recursos?", "options": ["AWS Config", "CloudWatch", "CloudTrail", "Cost Explorer"], "answer": "A", "explanation": "Config registra e avalia configurações de recursos ao longo do tempo."}, {"q": "Qual serviço fornece recomendações sobre otimização, segurança, desempenho e custos?", "options": ["AWS Trusted Advisor", "AWS Config", "AWS CloudTrail", "Amazon Route 53"], "answer": "A", "explanation": "Trusted Advisor fornece verificações e recomendações em várias categorias."}, {"q": "Qual serviço organiza múltiplas contas AWS centralmente?", "options": ["AWS Organizations", "AWS IAM", "Amazon SQS", "AWS Lambda"], "answer": "A", "explanation": "Organizations permite gerenciar múltiplas contas de forma centralizada."}, {"q": "Qual mecanismo permite aplicar controles de permissões máximas a contas dentro de Organizations?", "options": ["Service Control Policies", "IAM Groups", "Security Groups", "Route Tables"], "answer": "A", "explanation": "SCPs definem limites de permissões para contas/OU, sem conceder permissões por si mesmas."}, {"q": "Qual ferramenta é apropriada para prever o custo de uma nova arquitetura antes de implantá-la?", "options": ["AWS Pricing Calculator", "Cost Explorer", "CloudTrail", "AWS Config"], "answer": "A", "explanation": "Pricing Calculator é usada para estimativas antes da implementação."}, {"q": "Qual serviço é voltado a mover bancos de dados para a AWS minimizando mudanças na aplicação?", "options": ["AWS Database Migration Service", "AWS Migration Hub", "AWS DataSync", "AWS Snowball"], "answer": "A", "explanation": "DMS é usado para migração de bancos de dados."}, {"q": "Qual estratégia dos 6 Rs mantém uma aplicação essencialmente como está, sem migração imediata?", "options": ["Retain", "Rehost", "Refactor", "Repurchase"], "answer": "A", "explanation": "Retain significa manter o workload no ambiente atual por enquanto."}, {"q": "Qual estratégia move uma aplicação para a nuvem com poucas ou nenhuma alteração?", "options": ["Rehost", "Refactor", "Repurchase", "Retire"], "answer": "A", "explanation": "Rehost é frequentemente descrito como lift-and-shift."}, {"q": "Qual estratégia envolve modificar a arquitetura da aplicação de forma significativa para aproveitar recursos cloud-native?", "options": ["Refactor", "Retain", "Rehost", "Retire"], "answer": "A", "explanation": "Refactor envolve reestruturar a aplicação para aproveitar melhor a nuvem."}, {"q": "Qual serviço oferece armazenamento de objetos com alta durabilidade e classes de armazenamento?", "options": ["Amazon S3", "Amazon EFS", "Amazon EBS", "Amazon EC2"], "answer": "A", "explanation": "S3 é o principal serviço de object storage da AWS."}, {"q": "Qual diferença é mais adequada entre Authentication e Authorization?", "options": ["Authentication verifica identidade; Authorization determina permissões", "Authentication define preço; Authorization define região", "Ambas significam exatamente a mesma coisa", "Authorization ocorre antes da identidade"], "answer": "A", "explanation": "Autenticação verifica quem é o principal; autorização determina o que ele pode fazer."}, {"q": "Qual afirmação melhor diferencia CloudWatch e CloudTrail?", "options": ["CloudWatch monitora métricas/logs; CloudTrail registra atividade de API", "CloudWatch é IAM; CloudTrail é DNS", "CloudWatch substitui VPC; CloudTrail substitui S3", "São o mesmo serviço"], "answer": "A", "explanation": "CloudWatch é observabilidade/monitoramento; CloudTrail é auditoria de atividade."}, {"q": "Qual combinação representa corretamente armazenamento de bloco, arquivo e objeto?", "options": ["EBS, EFS, S3", "S3, EBS, EFS", "EFS, S3, EBS", "RDS, EFS, SQS"], "answer": "A", "explanation": "EBS = bloco; EFS = arquivo; S3 = objetos."}];
+
+const moduleData = {
+"01": ["Cloud Concepts", `<h3>O que dominar</h3><ul><li>Computação em nuvem e modelo pay-as-you-go.</li><li>Elasticidade e escalabilidade não são sinônimos: elasticidade enfatiza ajuste dinâmico à demanda.</li><li>Alta disponibilidade busca reduzir indisponibilidade; tolerância a falhas busca continuar operando apesar de falhas.</li><li>CapEx representa investimento de capital; OpEx representa despesas operacionais.</li><li>Shared Responsibility Model: a AWS protege a infraestrutura da nuvem; o cliente é responsável pela segurança <i>na</i> nuvem conforme o serviço utilizado.</li></ul><div class="callout"><b>ATENÇÃO PARA A PROVA:</b> leia o cenário e identifique se a questão está falando de custo, disponibilidade, elasticidade, responsabilidade ou localização.</div>`],
+"02": ["Global Infrastructure", `<h3>Mapa mental</h3><ul><li><b>Region:</b> área geográfica que contém múltiplas Availability Zones.</li><li><b>Availability Zone:</b> localização isolada dentro de uma Region.</li><li><b>Edge Location:</b> ponto de presença usado, entre outros casos, pelo CloudFront.</li><li><b>Local Zone:</b> aproxima recursos de regiões metropolitanas específicas.</li><li><b>Wavelength Zone:</b> aproxima recursos de redes 5G compatíveis.</li><li><b>Outposts:</b> infraestrutura AWS em instalações do cliente.</li></ul>`],
+"03": ["IAM & Security", `<h3>Diferenças que mais confundem</h3><ul><li><b>Authentication:</b> quem é você.</li><li><b>Authorization:</b> o que você pode fazer.</li><li><b>Role:</b> identidade assumível, muito usada por serviços e acessos temporários.</li><li><b>Policy:</b> documento de permissões.</li><li><b>SCP:</b> estabelece limites de permissões em Organizations; não concede permissões por si só.</li><li><b>KMS:</b> chaves criptográficas.</li><li><b>Secrets Manager:</b> segredos e credenciais.</li></ul>`],
+"04": ["Compute", `<h3>Como reconhecer</h3><ul><li><b>EC2:</b> controle sobre instâncias.</li><li><b>Lambda:</b> execução serverless de funções.</li><li><b>ECS:</b> orquestração de containers AWS.</li><li><b>EKS:</b> Kubernetes gerenciado.</li><li><b>Fargate:</b> execução de containers sem gerenciar servidores.</li><li><b>ECR:</b> registry de imagens.</li></ul><div class="callout"><b>Modelos de compra:</b> On-Demand = flexibilidade; Spot = capacidade excedente e interrupções possíveis; Reserved/Savings Plans = compromisso em troca de economia.</div>`],
+"05": ["Storage", `<h3>Regra prática</h3><ul><li><b>S3:</b> objetos.</li><li><b>EBS:</b> blocos, normalmente para EC2.</li><li><b>EFS:</b> arquivos compartilhados via NFS.</li><li><b>Instance Store:</b> armazenamento local e efêmero.</li><li>Use Storage Classes do S3 conforme frequência de acesso, disponibilidade, latência e retenção desejadas.</li></ul>`],
+"06": ["Databases", `<h3>Escolha por modelo</h3><ul><li><b>RDS:</b> bancos relacionais gerenciados.</li><li><b>Aurora:</b> banco relacional compatível com engines suportadas e otimizado pela AWS.</li><li><b>DynamoDB:</b> NoSQL key-value/document.</li><li><b>ElastiCache:</b> cache em memória.</li><li><b>Redshift:</b> data warehouse.</li><li><b>Neptune:</b> graph database.</li><li><b>DocumentDB:</b> document database compatível com workloads MongoDB.</li></ul>`],
+"07": ["Networking", `<h3>Conceitos-chave</h3><ul><li>Public subnet normalmente possui rota para Internet Gateway.</li><li>Private subnet não possui rota direta de entrada pela internet; NAT Gateway pode permitir saída.</li><li>Security Groups são stateful.</li><li>NACLs atuam em nível de subnet.</li><li>VPC Peering conecta VPCs; Transit Gateway funciona como hub para múltiplas redes.</li><li>VPN usa conectividade criptografada; Direct Connect é conexão dedicada.</li></ul>`],
+"08": ["Application Integration", `<h3>Padrões</h3><ul><li><b>SQS:</b> queue e desacoplamento.</li><li><b>SNS:</b> publish/subscribe e fan-out.</li><li><b>EventBridge:</b> eventos e regras entre produtores e destinos.</li><li><b>Step Functions:</b> orquestração de workflows com estados.</li><li>Uma boa questão descreve o padrão desejado antes de citar o serviço.</li></ul>`],
+"09": ["Monitoring & Governance", `<h3>Não confunda</h3><ul><li><b>CloudWatch:</b> métricas, logs, alarmes e observabilidade.</li><li><b>CloudTrail:</b> auditoria de ações/API.</li><li><b>Config:</b> histórico/avaliação de configurações e conformidade.</li><li><b>Trusted Advisor:</b> recomendações e verificações.</li><li><b>Organizations:</b> gestão centralizada de múltiplas contas.</li></ul>`],
+"10": ["Billing & Cost Management", `<h3>Ferramenta certa</h3><ul><li><b>Pricing Calculator:</b> estimar antes.</li><li><b>Cost Explorer:</b> analisar custos e uso.</li><li><b>Budgets:</b> definir limites e alertas.</li><li><b>CUR:</b> dados detalhados de custo e uso.</li><li><b>Rightsizing:</b> ajustar recursos ao uso real.</li></ul>`],
+"11": ["Well-Architected Framework", `<h3>Seis pilares</h3><ul><li>Operational Excellence</li><li>Security</li><li>Reliability</li><li>Performance Efficiency</li><li>Cost Optimization</li><li>Sustainability</li></ul><div class="callout"><b>ATENÇÃO:</b> a questão normalmente descreve um objetivo. Identifique o objetivo primeiro; depois associe ao pilar.</div>`],
+"12": ["Support & Cloud Adoption", `<h3>Suporte e migração</h3><ul><li>Support Center, planos de suporte, Trusted Advisor, Health Dashboard, re:Post e Knowledge Center.</li><li>Migration Hub acompanha migrações; Application Migration Service auxilia migração de servidores/aplicações; DMS é voltado a bancos de dados.</li><li>6 Rs: Rehost, Replatform, Repurchase, Refactor, Retain e Retire.</li></ul>`],
+"13": ["AI/ML & Outros Serviços", `<h3>Escolha pelo caso de uso</h3><ul><li><b>Bedrock:</b> aplicações generativas com modelos fundacionais.</li><li><b>SageMaker:</b> construção, treinamento e implantação de ML.</li><li><b>Rekognition:</b> análise de imagens/vídeos.</li><li><b>Textract:</b> extração de texto/dados de documentos.</li><li><b>Transcribe:</b> fala → texto.</li><li><b>Translate:</b> tradução.</li><li><b>Comprehend:</b> análise de linguagem.</li><li><b>Polly:</b> texto → fala.</li></ul>`],
+"14": ["Pegadinhas & Revisão", `<h3>Estratégia de prova</h3><ul><li>Sublinhe mentalmente palavras como <b>temporário</b>, <b>fila</b>, <b>fan-out</b>, <b>DNS</b>, <b>CDN</b>, <b>dedicado</b>, <b>serverless</b>, <b>relacional</b>, <b>key-value</b>, <b>auditoria</b> e <b>métricas</b>.</li><li>Compare o requisito com a finalidade do serviço, não apenas com o nome.</li><li>Elimine alternativas que resolvem outro problema.</li></ul>`]
+};
+
+function scrollToId(id) { document.getElementById(id).scrollIntoView({behavior:'smooth'}); }
+function filterModules(value) {
+  const v=value.toLowerCase();
+  document.querySelectorAll('.module-card').forEach(c=>c.style.display=c.dataset.search.includes(v)?'flex':'none');
+}
+function openModule(num) {
+  const d=moduleData[num]; document.getElementById('studyView').style.display='block';
+  document.getElementById('studyNum').textContent='MÓDULO '+num;
+  document.getElementById('studyTitle').textContent=d[0];
+  document.getElementById('studyContent').innerHTML=d[1];
+  document.getElementById('studyView').scrollIntoView({behavior:'smooth',block:'start'});
+}
+function closeModule() { document.getElementById('studyView').style.display='none'; }
+
+let current=0, answers=Array(questions.length).fill(null), submitted=Array(questions.length).fill(false);
+const quiz=document.getElementById('quiz');
+function renderQuestion() {
+  const x=questions[current];
+  document.getElementById('counter').textContent=`Questão ${current+1} de ${questions.length}`;
+  document.getElementById('bar').style.width=((current+1)/questions.length*100)+'%';
+  let opts=x.options.map((o,i)=>`<label class="option"><input type="radio" name="opt" value="${String.fromCharCode(65+i)}" ${answers[current]===String.fromCharCode(65+i)?'checked':''}>${String.fromCharCode(65+i)}) ${o}</label>`).join('');
+  const fb=submitted[current] ? `<div class="feedback ${answers[current]===x.answer?'ok':'bad'}">${answers[current]===x.answer?'✓ Resposta correta. ':'✗ Resposta incorreta. '}${x.explanation}</div>` : '';
+  quiz.innerHTML=`<div class="quiz-card active"><div class="qnum">QUESTÃO ${current+1}</div><h3>${x.q}</h3><div>${opts}</div>${fb}<div class="navquiz"><button class="ghost" onclick="prevQ()" ${current===0?'disabled':''}>← Anterior</button><div style="display:flex;gap:8px"><button class="ghost" onclick="checkQ()">Verificar</button><button class="primary" onclick="nextQ()">${current===questions.length-1?'Finalizar':'Próxima →'}</button></div></div></div>`;
+  updateScore();
+}
+function saveSelected() { const s=document.querySelector('input[name="opt"]:checked'); if(s) answers[current]=s.value; }
+function checkQ() { saveSelected(); submitted[current]=true; renderQuestion(); }
+function nextQ() { saveSelected(); if(current<questions.length-1){current++;renderQuestion();} else showResult(); }
+function prevQ() { saveSelected(); if(current>0){current--;renderQuestion();} }
+function updateScore() { document.getElementById('liveScore').textContent='Acertos: '+answers.filter((a,i)=>a===questions[i].answer).length; }
+function showResult() {
+  saveSelected(); let score=answers.filter((a,i)=>a===questions[i].answer).length;
+  quiz.style.display='none'; const r=document.getElementById('result'); r.style.display='block';
+  const pct=Math.round(score/questions.length*100);
+  const review=questions.map((x,i)=>answers[i]!==x.answer?`<div class="review-item"><b>Questão ${i+1}</b> — sua resposta: <span class="wrong">${answers[i]||'não respondida'}</span> • correta: <span class="correct">${x.answer}</span><br>${x.explanation}</div>`:'').join('');
+  r.innerHTML=`<div class="score">${score}/${questions.length}</div><h2>${pct}% de aproveitamento</h2><p>Revise principalmente os conceitos associados às questões que você errou.</p><div class="review"><h3>Revisão dos erros</h3>${review||'<p class="correct">Nenhuma questão errada. Faça uma nova rodada para validar retenção.</p>'}</div><button class="primary" onclick="restartQuiz()">Refazer simulado</button>`;
+}
+function restartQuiz() { current=0;answers=Array(questions.length).fill(null);submitted=Array(questions.length).fill(false);document.getElementById('result').style.display='none';quiz.style.display='block';renderQuestion();scrollToId('simulado');}
+
+
+// =============================
+// TIMELINE DE ESTUDOS — ESTILO GIT
+// =============================
+const STUDY_LOG_KEY = 'clf_c02_study_log_v1';
+
+function getStudyLog() {
+  try { return JSON.parse(localStorage.getItem(STUDY_LOG_KEY) || '{}'); }
+  catch(e) { return {}; }
+}
+
+function markStudyToday() {
+  const log = getStudyLog();
+  const today = new Date().toISOString().slice(0,10);
+  if (!log[today]) {
+    log[today] = {
+      firstVisit: new Date().toISOString(),
+      commits: 1
+    };
+  } else {
+    log[today].commits = (log[today].commits || 0) + 1;
+    log[today].lastVisit = new Date().toISOString();
+  }
+  localStorage.setItem(STUDY_LOG_KEY, JSON.stringify(log));
+  renderStudyTimeline();
+}
+
+function formatStudyDate(dateKey) {
+  const parts = dateKey.split('-').map(Number);
+  const d = new Date(parts[0], parts[1] - 1, parts[2]);
+  return d.toLocaleDateString('pt-BR', {
+    day: '2-digit',
+    month: 'short'
+  }).replace('.', '');
+}
+
+function renderStudyTimeline() {
+  const el = document.getElementById('gitTimeline');
+  if (!el) return;
+
+  const log = getStudyLog();
+  const today = new Date();
+
+  // Mais recente primeiro: hoje -> passado.
+  const days = [];
+  for (let i = 0; i < 30; i++) {
+    const d = new Date(today);
+    d.setHours(12, 0, 0, 0);
+    d.setDate(today.getDate() - i);
+    days.push(d);
+  }
+
+  const html = days.map(d => {
+    const year = d.getFullYear();
+    const month = String(d.getMonth() + 1).padStart(2, '0');
+    const day = String(d.getDate()).padStart(2, '0');
+    const key = `${year}-${month}-${day}`;
+    const item = log[key];
+    const todayKey = new Date().toISOString().slice(0,10);
+    const isToday = key === todayKey;
+    const dateLabel = formatStudyDate(key);
+    const hash = item ? generateFakeHash(key) : '·······';
+    const commits = item ? `${item.commits || 1} commit${(item.commits || 1) > 1 ? 's' : ''}` : 'sem estudo';
+
+    return `<div class="git-day ${item ? 'active' : ''} ${isToday ? 'today' : ''}">
+      <div style="width:100%">
+        <div><strong>${dateLabel}</strong> <span class="git-hash">${hash}</span></div>
+        <div style="font-size:10px;margin-top:1px">${commits}${isToday ? ' • hoje' : ''}</div>
+      </div>
+    </div>`;
+  }).join('');
+
+  el.innerHTML = html;
+}
+
+function generateFakeHash(dateKey) {
+  // Hash visual determinístico para simular um commit.
+  let h = 2166136261;
+  for (let i=0;i<dateKey.length;i++) {
+    h ^= dateKey.charCodeAt(i);
+    h = Math.imul(h, 16777619);
+  }
+  return (h >>> 0).toString(16).padStart(8,'0').slice(0,7);
+}
+
+markStudyToday();
+
+function toggleSidebar() {
+  const sidebar = document.getElementById('studySidebar');
+  const btn = document.getElementById('sidebarToggle');
+  const hidden = sidebar.classList.toggle('collapsed');
+  document.body.classList.toggle('sidebar-hidden', hidden);
+  btn.textContent = hidden ? '›' : '‹';
+  btn.title = hidden ? 'Mostrar barra lateral' : 'Ocultar barra lateral';
+  btn.setAttribute('aria-label', btn.title);
+  localStorage.setItem('clf_sidebar_hidden', hidden ? '1' : '0');
+}
+
+function restoreSidebarState() {
+  const hidden = localStorage.getItem('clf_sidebar_hidden') === '1';
+  const sidebar = document.getElementById('studySidebar');
+  const btn = document.getElementById('sidebarToggle');
+  if (hidden) {
+    sidebar.classList.add('collapsed');
+    document.body.classList.add('sidebar-hidden');
+    btn.textContent = '›';
+    btn.title = 'Mostrar barra lateral';
+    btn.setAttribute('aria-label', btn.title);
+  }
+}
+
+restoreSidebarState();
+
+// =============================
+// PERSISTÊNCIA DE PROGRESSO
+// =============================
+const STORAGE_KEY = 'clf_c02_progress_v2';
+
+function saveProgress() {
+  try {
+    const data = {
+      current,
+      answers,
+      submitted,
+      checklist: Array.from(document.querySelectorAll('#checklist input[type="checkbox"]')).map(x => x.checked),
+      savedAt: new Date().toISOString()
+    };
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+    showSaveStatus('Progresso salvo automaticamente');
+  } catch (e) {
+    console.warn('Não foi possível salvar o progresso:', e);
+  }
+}
+
+function loadProgress() {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if (!raw) return false;
+
+    const data = JSON.parse(raw);
+
+    if (Array.isArray(data.answers) && data.answers.length === questions.length) {
+      answers = data.answers;
+    }
+    if (Array.isArray(data.submitted) && data.submitted.length === questions.length) {
+      submitted = data.submitted;
+    }
+    if (Number.isInteger(data.current) && data.current >= 0 && data.current < questions.length) {
+      current = data.current;
+    }
+
+    if (Array.isArray(data.checklist)) {
+      const boxes = document.querySelectorAll('#checklist input[type="checkbox"]');
+      data.checklist.forEach((checked, i) => {
+        if (boxes[i]) boxes[i].checked = !!checked;
+      });
+    }
+
+    return true;
+  } catch (e) {
+    console.warn('Não foi possível carregar o progresso:', e);
+    return false;
+  }
+}
+
+function showSaveStatus(message) {
+  let el = document.getElementById('saveStatus');
+  if (!el) {
+    el = document.createElement('div');
+    el.id = 'saveStatus';
+    el.style.cssText = `
+      position:fixed;right:18px;bottom:18px;z-index:9999;
+      background:#0d1b2d;border:1px solid #1d3550;color:#c5d2e2;
+      padding:10px 14px;border-radius:10px;font-size:13px;
+      box-shadow:0 10px 30px rgba(0,0,0,.3);
+      opacity:0;transition:opacity .2s;
+    `;
+    document.body.appendChild(el);
+  }
+  el.textContent = '✓ ' + message;
+  el.style.opacity = '1';
+  clearTimeout(window.__saveTimer);
+  window.__saveTimer = setTimeout(() => el.style.opacity = '0', 1800);
+}
+
+function clearProgress() {
+  if (!confirm('Tem certeza que deseja apagar todo o progresso deste simulado e checklist?')) return;
+  localStorage.removeItem(STORAGE_KEY);
+  current = 0;
+  answers = Array(questions.length).fill(null);
+  submitted = Array(questions.length).fill(false);
+  document.querySelectorAll('#checklist input[type="checkbox"]').forEach(x => x.checked = false);
+  document.getElementById('result').style.display = 'none';
+  document.getElementById('quiz').style.display = 'block';
+  renderQuestion();
+  showSaveStatus('Progresso apagado');
+}
+
+function addPersistenceHooks() {
+  document.querySelectorAll('#checklist input[type="checkbox"]').forEach(box => {
+    box.addEventListener('change', saveProgress);
+  });
+
+  // Salva também quando o usuário fecha/atualiza a página.
+  window.addEventListener('beforeunload', saveProgress);
+
+  // Salva quando a aba fica em segundo plano.
+  document.addEventListener('visibilitychange', () => {
+    if (document.visibilityState === 'hidden') saveProgress();
+  });
+}
+
+// Sobrescreve as funções de navegação para salvar antes de trocar de questão.
+const _nextQ = nextQ;
+const _prevQ = prevQ;
+const _checkQ = checkQ;
+
+nextQ = function() {
+  saveSelected();
+  saveProgress();
+  _nextQ();
+  saveProgress();
+};
+
+prevQ = function() {
+  saveSelected();
+  saveProgress();
+  _prevQ();
+  saveProgress();
+};
+
+checkQ = function() {
+  saveSelected();
+  saveProgress();
+  _checkQ();
+  saveProgress();
+};
+
+// Reiniciar o simulado agora exige confirmação e limpa o estado salvo.
+const _restartQuiz = restartQuiz;
+restartQuiz = function() {
+  if (!confirm('Deseja realmente reiniciar o simulado? Seu progresso atual será apagado.')) return;
+  localStorage.removeItem(STORAGE_KEY);
+  _restartQuiz();
+  saveProgress();
+};
+
+// Carrega progresso existente antes da primeira renderização.
+const hadSavedProgress = loadProgress();
+addPersistenceHooks();
+renderQuestion();
+
+if (hadSavedProgress) {
+  showSaveStatus('Progresso anterior restaurado');
+}
+
+// Botão para apagar progresso, adicionado à área do simulado.
+const simPanel = document.querySelector('#simulado .panel');
+const clearBtn = document.createElement('button');
+clearBtn.className = 'ghost';
+clearBtn.textContent = '🗑 Apagar progresso';
+clearBtn.onclick = clearProgress;
+clearBtn.style.marginBottom = '14px';
+simPanel.insertBefore(clearBtn, simPanel.firstChild);
+</script>
+</body>
+</html>
