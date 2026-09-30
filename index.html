@@ -126,7 +126,36 @@ body.sidebar-hidden .container{max-width:1400px}
 .panel{padding:24px} .grid2{display:grid;grid-template-columns:1fr 1fr;gap:18px} .callout{border-left:4px solid var(--accent);background:#0a192a;padding:15px;border-radius:0 10px 10px 0} .table-wrap{overflow:auto} table{width:100%;border-collapse:collapse;min-width:680px} th,td{border-bottom:1px solid var(--line);padding:11px;text-align:left;vertical-align:top} th{color:#ffd18a;background:#0a192a} code,.kbd{background:#071525;border:1px solid var(--line);padding:2px 6px;border-radius:5px;color:#bce7ff}
 #studyView{display:none;margin-top:20px} #studyContent h3{color:#ffd18a} #studyContent li{margin:6px 0;color:#c5d2e2}
 .exam-top{display:flex;gap:12px;flex-wrap:wrap;align-items:center;margin-bottom:18px} .progress{height:9px;background:#071525;border-radius:99px;overflow:hidden;flex:1;min-width:180px} .progress div{height:100%;background:linear-gradient(90deg,#ff9900,#38bdf8);width:0}
-.quiz-card{padding:24px;display:none} .quiz-card.active{display:block} .qnum{color:var(--accent);font-weight:800} .option{display:block;padding:13px;margin:10px 0;background:#0a192a;border:1px solid var(--line);border-radius:10px;cursor:pointer} .option:hover{border-color:#4d7398} .option input{margin-right:10px} .navquiz{display:flex;justify-content:space-between;margin-top:20px;gap:10px} .feedback{margin-top:18px;padding:15px;border-radius:10px;display:none} .feedback.ok{display:block;background:rgba(52,211,153,.1);border:1px solid rgba(52,211,153,.35)} .feedback.bad{display:block;background:rgba(251,113,133,.1);border:1px solid rgba(251,113,133,.35)} .result-card{padding:28px;display:none;text-align:center} .score{font-size:58px;font-weight:900;color:var(--accent)} .review{margin-top:20px;text-align:left} .review-item{padding:15px;border-top:1px solid var(--line)} .correct{color:var(--ok)} .wrong{color:var(--bad)}
+.quiz-card{padding:26px;display:none} .quiz-card.active{display:block}
+.quiz-meta{display:flex;align-items:center;gap:10px;margin-bottom:12px;flex-wrap:wrap}
+.qnum{color:#17202b;background:#e8edf3;font-weight:900;font-size:13px;padding:5px 8px;border-radius:4px}
+.quiz-topic{display:inline-flex;align-items:center;background:#f4f1e9;color:#1d2935;border:1px solid #ddd6c8;padding:4px 8px;border-radius:4px;font-size:12px;font-weight:700}
+.quiz-card h3{font-size:19px;line-height:1.5;margin:12px 0 20px;color:#f6f8fb}
+.option{display:flex;align-items:center;gap:12px;min-height:58px;padding:14px 16px;margin:11px 0;background:#f7f5f0;color:#17202b;border:2px solid transparent;border-radius:10px;cursor:pointer;transition:all .16s ease;position:relative}
+.option:hover{transform:translateY(-1px);box-shadow:0 6px 18px rgba(0,0,0,.14)}
+.option input{appearance:none;width:28px;height:28px;min-width:28px;border-radius:50%;border:0;background:#e5e0d6;margin:0;position:relative}
+.option input:checked{background:#ff3f63}
+.option input:checked:after{content:'';position:absolute;inset:8px;border-radius:50%;background:white}
+.option .letter{font-weight:900;color:#34404d;min-width:20px}
+.option .option-text{font-size:15px;font-weight:600;color:#243142}
+.option.selected-wrong{background:#fff0f2;border-color:#ff4d6d}
+.option.selected-wrong input{background:#ff3f63}
+.option.correct-answer{background:#eefcf7;border:2px dashed #34d399}
+.option.correct-answer input{background:#a7f3d0}
+.option.correct-answer input:after{content:'✓';position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:none;color:#087f5b;font-size:15px;font-weight:900}
+.option.correct-answer .option-text,.option.selected-wrong .option-text{color:#203040}
+.option.disabled-after-check{cursor:default}
+.answer-icon{margin-left:auto;font-size:16px;font-weight:900}
+.navquiz{display:flex;justify-content:space-between;margin-top:22px;gap:10px;align-items:center}.navquiz-actions{display:flex;gap:8px;flex-wrap:wrap}
+.feedback{margin-top:20px;padding:17px 16px;border-radius:10px;display:none;color:#1d2935;background:#fff8e8;border:1px solid #f4c95d}
+.feedback.ok{display:block;background:#ecfdf5;border-color:#34d399}.feedback.bad{display:block;background:#fff8e8;border-color:#f4c95d}
+.feedback-title{font-weight:900;margin-bottom:8px;color:#17202b}.feedback-text{line-height:1.65;color:#344054}
+.question-note{margin-top:18px;padding:16px;border:1px solid #29445f;border-radius:12px;background:#071525}
+.question-note-title{font-weight:800;color:#eef5ff;margin-bottom:5px}.question-note-hint{font-size:12px;color:#8196ad;margin-bottom:10px}
+.question-note textarea{width:100%;min-height:105px;resize:vertical;background:#06111f;color:#eef5ff;border:1px solid #29445f;border-radius:10px;padding:12px;font:inherit;line-height:1.55;outline:none}.question-note textarea:focus{border-color:#ff9900;box-shadow:0 0 0 3px rgba(255,153,0,.10)}
+.question-note-footer{font-size:11px;color:#71859b;margin-top:7px;display:flex;justify-content:space-between}.question-note-saved{color:#34d399;opacity:0}.question-note-saved.show{opacity:1}
+.result-card{padding:28px;display:none;text-align:center}.score{font-size:58px;font-weight:900;color:var(--accent)}.review{margin-top:20px;text-align:left}.review-item{padding:15px;border-top:1px solid var(--line)}.correct{color:var(--ok)}.wrong{color:var(--bad)}
+@media(max-width:650px){.quiz-card{padding:17px}.quiz-card h3{font-size:17px}.option{padding:12px;min-height:54px}.navquiz{flex-direction:column;align-items:stretch}.navquiz-actions{width:100%}.navquiz button{flex:1}.question-note-footer{flex-direction:column;gap:5px}}
 .checklist{display:grid;grid-template-columns:repeat(2,1fr);gap:10px} label.check{display:flex;gap:10px;background:#0a192a;padding:12px;border:1px solid var(--line);border-radius:9px} footer{border-top:1px solid var(--line);padding:30px 22px;color:var(--muted);text-align:center}
 @media(max-width:1000px){.hero,.grid2{grid-template-columns:1fr}.modules{grid-template-columns:repeat(2,1fr)}}
 @media(max-width:650px){.modules,.checklist{grid-template-columns:1fr}.navlinks{display:none}.hero{padding-top:35px}}
@@ -581,13 +610,39 @@ function closeModule() { document.getElementById('studyView').style.display='non
 
 let current=0, answers=Array(questions.length).fill(null), submitted=Array(questions.length).fill(false);
 const quiz=document.getElementById('quiz');
+const questionTopics = [
+  'Cloud Concepts','Cloud Concepts','Global Infrastructure','Networking / CDN','IAM & Security','IAM & Security','Monitoring & Governance','Monitoring & Governance','Compute','Compute / Pricing','Compute / Pricing','Storage','Storage','Storage','Storage','Databases','Databases','Databases','Databases','Networking','Networking','Networking / DNS','Application Integration','Application Integration','Application Integration','Compute / Serverless','Application Integration','Billing & Cost','Billing & Cost','Billing & Cost','Well-Architected','Well-Architected','Well-Architected','Security','Security','Security','Security','Security','Security','Containers','Containers','Containers','Containers','AI/ML','AI/ML','AI/ML','AI/ML','AI/ML','Networking','Networking','Networking','Networking','Governance','Governance','Governance','Governance','Billing & Cost','Migration','Migration','Migration','Migration','Storage','IAM & Security','Monitoring & Governance','Storage'
+];
+const QUESTION_NOTES_KEY='clf_c02_question_notes_v1';
+function getQuestionNotes(){try{return JSON.parse(localStorage.getItem(QUESTION_NOTES_KEY)||'{}')}catch(e){return {}}}
+function saveQuestionNote(index,value){const n=getQuestionNotes();n[index]=value;localStorage.setItem(QUESTION_NOTES_KEY,JSON.stringify(n));const el=document.getElementById('questionNoteSaved');if(el){el.classList.add('show');clearTimeout(window.__qNoteTimer);window.__qNoteTimer=setTimeout(()=>el.classList.remove('show'),1000)}}
 function renderQuestion() {
   const x=questions[current];
+  const topic=questionTopics[current]||'CLF-C02';
+  const notes=getQuestionNotes();
+  const savedNote=(notes[current]||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
   document.getElementById('counter').textContent=`Questão ${current+1} de ${questions.length}`;
   document.getElementById('bar').style.width=((current+1)/questions.length*100)+'%';
-  let opts=x.options.map((o,i)=>`<label class="option"><input type="radio" name="opt" value="${String.fromCharCode(65+i)}" ${answers[current]===String.fromCharCode(65+i)?'checked':''}>${String.fromCharCode(65+i)}) ${o}</label>`).join('');
-  const fb=submitted[current] ? `<div class="feedback ${answers[current]===x.answer?'ok':'bad'}">${answers[current]===x.answer?'✓ Resposta correta. ':'✗ Resposta incorreta. '}${x.explanation}</div>` : '';
-  quiz.innerHTML=`<div class="quiz-card active"><div class="qnum">QUESTÃO ${current+1}</div><h3>${x.q}</h3><div>${opts}</div>${fb}<div class="navquiz"><button class="ghost" onclick="prevQ()" ${current===0?'disabled':''}>← Anterior</button><div style="display:flex;gap:8px"><button class="ghost" onclick="checkQ()">Verificar</button><button class="primary" onclick="nextQ()">${current===questions.length-1?'Finalizar':'Próxima →'}</button></div></div></div>`;
+  const checked=answers[current];
+  let opts=x.options.map((o,i)=>{
+    const letter=String.fromCharCode(65+i);
+    let cls='option';
+    let icon='';
+    if(submitted[current]){
+      if(letter===x.answer){cls+=' correct-answer';icon='<span class="answer-icon">✓</span>';}
+      if(letter===checked && letter!==x.answer){cls+=' selected-wrong';icon='<span class="answer-icon">✕</span>';}
+    }
+    return `<label class="${cls} ${submitted[current]?'disabled-after-check':''}"><input type="radio" name="opt" value="${letter}" ${checked===letter?'checked':''} ${submitted[current]?'disabled':''}><span class="letter">${letter}</span><span class="option-text">${o}</span>${icon}</label>`;
+  }).join('');
+  let fb='';
+  if(submitted[current]){
+    const ok=checked===x.answer;
+    fb=`<div class="feedback ${ok?'ok':'bad'}"><div class="feedback-title">${ok?'✓ Correto':'✗ Incorreto — veja a resposta'}</div><div class="feedback-text">${x.explanation}</div></div>`;
+  }
+  const note=`<div class="question-note"><div class="question-note-title">📝 Minhas palavras</div><div class="question-note-hint">Explique com suas próprias palavras por que esta é a resposta correta. Use este espaço como seu bloco de notas da questão.</div><textarea id="questionNote" placeholder="Escreva aqui o que você entendeu...">${savedNote}</textarea><div class="question-note-footer"><span>Salvo automaticamente neste dispositivo.</span><span id="questionNoteSaved" class="question-note-saved">✓ Salvo</span></div></div>`;
+  quiz.innerHTML=`<div class="quiz-card active"><div class="quiz-meta"><span class="qnum">${current+1}.</span><span class="quiz-topic">${topic}</span></div><h3>${x.q}</h3><div>${opts}</div>${fb}${note}<div class="navquiz"><button class="ghost" onclick="prevQ()" ${current===0?'disabled':''}>← Anterior</button><div class="navquiz-actions"><button class="ghost" onclick="checkQ()" ${submitted[current]?'disabled':''}>${submitted[current]?'Resposta verificada':'Verificar resposta'}</button><button class="primary" onclick="nextQ()">${current===questions.length-1?'Finalizar':'Próxima →'}</button></div></div></div>`;
+  const textarea=document.getElementById('questionNote');
+  if(textarea) textarea.addEventListener('input',()=>saveQuestionNote(current,textarea.value));
   updateScore();
 }
 function saveSelected() { const s=document.querySelector('input[name="opt"]:checked'); if(s) answers[current]=s.value; }
