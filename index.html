@@ -110,8 +110,12 @@ body.sidebar-hidden .container{max-width:1400px}
  .study-sidebar{display:none}
 }
 @media(min-width:1101px){
- .header,.hero,.container,footer{margin-left:250px}
- .hero,.container{max-width:1150px}
+ .header,.hero,.container,footer{margin-left:250px;margin-right:0;width:calc(100% - 250px);max-width:none}
+ .nav,.hero,.container{padding-left:clamp(22px,4vw,64px);padding-right:clamp(22px,4vw,64px)}
+ .nav{max-width:1150px;margin-left:auto;margin-right:auto}
+ .hero,.container{max-width:1150px;margin-left:calc(250px + (100% - 250px - 1150px)/2);margin-right:auto}
+ body.sidebar-hidden .header,body.sidebar-hidden .hero,body.sidebar-hidden .container,body.sidebar-hidden footer{margin-left:0;width:100%}
+ body.sidebar-hidden .nav,body.sidebar-hidden .hero,body.sidebar-hidden .container{max-width:1150px;margin-left:auto;margin-right:auto}
 }
  section{scroll-margin-top:85px;margin-top:28px}
 .section-title{display:flex;justify-content:space-between;align-items:end;gap:20px;margin:42px 0 18px} h2{font-size:30px;margin:0} .subtitle{color:var(--muted);margin:5px 0 0}
@@ -126,6 +130,19 @@ body.sidebar-hidden .container{max-width:1400px}
 .checklist{display:grid;grid-template-columns:repeat(2,1fr);gap:10px} label.check{display:flex;gap:10px;background:#0a192a;padding:12px;border:1px solid var(--line);border-radius:9px} footer{border-top:1px solid var(--line);padding:30px 22px;color:var(--muted);text-align:center}
 @media(max-width:1000px){.hero,.grid2{grid-template-columns:1fr}.modules{grid-template-columns:repeat(2,1fr)}}
 @media(max-width:650px){.modules,.checklist{grid-template-columns:1fr}.navlinks{display:none}.hero{padding-top:35px}}
+
+/* ===== BLOCO DE NOTAS DO ALUNO ===== */
+.study-notes{margin-top:26px;padding:18px;background:linear-gradient(145deg,rgba(7,21,37,.96),rgba(10,25,42,.96));border:1px solid #29445f;border-radius:14px}
+.study-notes-head{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:10px}
+.study-notes-title{font-weight:800;color:#eef5ff;font-size:16px}
+.study-notes-hint{font-size:12px;color:#8196ad}
+.study-notes textarea{width:100%;min-height:150px;resize:vertical;background:#06111f;color:#eef5ff;border:1px solid #29445f;border-radius:11px;padding:14px 15px;font:inherit;line-height:1.6;outline:none;transition:border-color .2s,box-shadow .2s}
+.study-notes textarea::placeholder{color:#60758c}
+.study-notes textarea:focus{border-color:#ff9900;box-shadow:0 0 0 3px rgba(255,153,0,.10)}
+.study-notes-footer{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-top:9px;color:#71859b;font-size:11px}
+.study-notes-saved{color:#34d399;opacity:0;transition:opacity .2s}
+.study-notes-saved.show{opacity:1}
+@media(max-width:650px){.study-notes textarea{min-height:125px}.study-notes-head{align-items:flex-start;flex-direction:column}.study-notes-footer{align-items:flex-start;flex-direction:column}}
 
 /* ===== LOGIN MODERNO + RESPONSIVO ===== */
 .login-screen{
@@ -530,11 +547,34 @@ function filterModules(value) {
   const v=value.toLowerCase();
   document.querySelectorAll('.module-card').forEach(c=>c.style.display=c.dataset.search.includes(v)?'flex':'none');
 }
+const MODULE_NOTES_KEY = 'clf_c02_module_notes_v1';
+function getModuleNotes(){
+  try{return JSON.parse(localStorage.getItem(MODULE_NOTES_KEY)||'{}')}catch(e){return {}}
+}
+function saveModuleNote(num, value){
+  const notes=getModuleNotes();
+  notes[num]=value;
+  localStorage.setItem(MODULE_NOTES_KEY, JSON.stringify(notes));
+  const saved=document.getElementById('noteSaved');
+  if(saved){saved.classList.add('show'); clearTimeout(window.__noteTimer); window.__noteTimer=setTimeout(()=>saved.classList.remove('show'),1200);}
+}
 function openModule(num) {
-  const d=moduleData[num]; document.getElementById('studyView').style.display='block';
+  const d=moduleData[num];
+  document.getElementById('studyView').style.display='block';
   document.getElementById('studyNum').textContent='MÓDULO '+num;
   document.getElementById('studyTitle').textContent=d[0];
-  document.getElementById('studyContent').innerHTML=d[1];
+  const notes=getModuleNotes();
+  const note=(notes[num]||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  document.getElementById('studyContent').innerHTML=d[1]+`
+    <div class="study-notes">
+      <div class="study-notes-head">
+        <div><div class="study-notes-title">📝 Minhas palavras</div><div class="study-notes-hint">Escreva com suas próprias palavras o que você entendeu desta aula.</div></div>
+      </div>
+      <textarea id="moduleNote" placeholder="Ex.: Elasticidade é ajustar recursos conforme a demanda. Na prova, se aparecer "aumentar e diminuir automaticamente", penso em elasticidade.">${note}</textarea>
+      <div class="study-notes-footer"><span>Salvo automaticamente neste dispositivo.</span><span id="noteSaved" class="study-notes-saved">✓ Salvo</span></div>
+    </div>`;
+  const textarea=document.getElementById('moduleNote');
+  textarea.addEventListener('input',()=>saveModuleNote(num,textarea.value));
   document.getElementById('studyView').scrollIntoView({behavior:'smooth',block:'start'});
 }
 function closeModule() { document.getElementById('studyView').style.display='none'; }
