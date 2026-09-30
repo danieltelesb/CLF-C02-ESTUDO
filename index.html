@@ -845,21 +845,25 @@ async function login() {
 
 <script id="cloud-sync-final">
 /* =========================================================
-   SINCRONIZAÇÃO REAL COM SUPABASE
-   PC <-> CELULAR
+   SINCRONIZAÇÃO CLOUD-FIRST COM SUPABASE
+   A nuvem é a fonte oficial quando o usuário está autenticado.
    ========================================================= */
+
 let cloudUser = null;
 let cloudSyncTimer = null;
 let cloudSyncReady = false;
+let cloudLoading = false;
+let cloudSaveInFlight = null;
 
 function getLocalProgressSnapshot() {
-  let checklist = [];
-  document.querySelectorAll('#checklist input[type="checkbox"]').forEach(x => checklist.push(!!x.checked));
+  const checklist = Array.from(
+    document.querySelectorAll('#checklist input[type="checkbox"]')
+  ).map(x => !!x.checked);
 
   return {
     current_question: Number.isInteger(current) ? current : 0,
-    answers: Array.isArray(answers) ? answers : [],
-    submitted: Array.isArray(submitted) ? submitted : [],
+    answers: Array.isArray(answers) ? [...answers] : [],
+    submitted: Array.isArray(submitted) ? [...submitted] : [],
     checklist,
     study_log: getStudyLog(),
     updated_at: new Date().toISOString()
@@ -869,33 +873,31 @@ function getLocalProgressSnapshot() {
 function hasMeaningfulProgress(state) {
   if (!state) return false;
 
-  const answered = Array.isArray(state.answers)
-    ? state.answers.some(v => v !== null && v !== undefined && v !== '')
-    : false;
+  const answered = Array.isArray(state.answers) &&
+    state.answers.some(v => v !== null && v !== undefined && v !== '');
 
-  const checked = Array.isArray(state.checklist)
-    ? state.checklist.some(Boolean)
-    : false;
+  const checked = Array.isArray(state.checklist) &&
+    state.checklist.some(Boolean);
 
-  const submittedAny = Array.isArray(state.submitted)
-    ? state.submitted.some(Boolean)
-    : false;
+  const submittedAny = Array.isArray(state.submitted) &&
+    state.submitted.some(Boolean);
 
-  const timelineAny = state.study_log && Object.keys(state.study_log).length > 0;
+  const timelineAny = state.study_log &&
+    Object.keys(state.study_log).length > 0;
 
   return answered || checked || submittedAny || timelineAny ||
-         (Number.isInteger(state.current_question) && state.current_question > 0);
+    (Number.isInteger(state.current_question) && state.current_question > 0);
 }
 
 function applyCloudProgress(data) {
   if (!data) return;
 
   if (Array.isArray(data.answers) && data.answers.length === questions.length) {
-    answers = data.answers;
+    answers = [...data.answers];
   }
 
   if (Array.isArray(data.submitted) && data.submitted.length === questions.length) {
-    submitted = data.submitted;
+    submitted = [...data.submitted];
   }
 
   if (
@@ -918,6 +920,7 @@ function applyCloudProgress(data) {
     renderStudyTimeline();
   }
 
+  /* Mantém uma cópia local exatamente igual à nuvem. */
   localStorage.setItem(STORAGE_KEY, JSON.stringify({
     current,
     answers,
@@ -944,44 +947,58 @@ async function getCloudUser() {
 }
 
 async function saveCloudProgress(showStatus = true) {
-  try {
-    const user = cloudUser || await getCloudUser();
-    if (!user) return false;
+  if (cloudLoading) return false;
 
-    const state = getLocalProgressSnapshot();
-
-    const { error } = await supabaseClient
-      .from('study_progress')
-      .upsert({
-        user_id: user.id,
-        current_question: state.current_question,
-        answers: state.answers,
-        submitted: state.submitted,
-        checklist: state.checklist,
-        study_log: state.study_log,
-        updated_at: state.updated_at
-      }, {
-        onConflict: 'user_id'
-      });
-
-    if (error) throw error;
-
-    cloudSyncReady = true;
-
-    if (showStatus) {
-      showSaveStatus('Progresso sincronizado com a nuvem');
-    }
-
-    return true;
-  } catch (error) {
-    console.error('Erro ao sincronizar progresso:', error);
-
-    if (showStatus) {
-      showSaveStatus('Salvo localmente • aguardando sincronização');
-    }
-
-    return false;
+  if (cloudSaveInFlight) {
+    return cloudSaveInFlight;
   }
+
+  cloudSaveInFlight = (async () => {
+    try {
+      const user = cloudUser || await getCloudUser();
+      if (!user) return false;
+
+      const state = getLocalProgressSnapshot();
+
+      const { data, error } = await supabaseClient
+        .from('study_progress')
+        .upsert({
+          user_id: user.id,
+          current_question: state.current_question,
+          answers: state.answers,
+          submitted: state.submitted,
+          checklist: state.checklist,
+          study_log: state.study_log,
+          updated_at: state.updated_at
+        }, {
+          onConflict: 'user_id'
+        })
+        .select()
+        .single();
+
+      if (error) throw error;
+
+      cloudSyncReady = true;
+
+      if (showStatus) {
+        showSaveStatus('☁️ Progresso sincronizado');
+      }
+
+      return !!data;
+    } catch (error) {
+      console.error('Erro ao sincronizar progresso:', error);
+
+      if (showStatus) {
+        showSaveStatus('Salvo localmente • aguardando sincronização');
+      }
+
+      return false;
+    } finally {
+      cloudSaveInFlight = null;
+    }
+  })();
+
+  return cloudSaveInFlight;
 }
 
 function saveProgress() {
@@ -996,17 +1013,20 @@ function saveProgress() {
       savedAt: state.updated_at
     }));
 
-    if (cloudUser) {
+    /*
+       Nunca envia o localStorage automaticamente enquanto estamos
+       carregando a nuvem. Isso impede que o estado vazio do celular
+       sobrescreva o progresso existente.
+    */
+    if (cloudUser && !cloudLoading) {
       clearTimeout(cloudSyncTimer);
       cloudSyncTimer = setTimeout(() => {
         saveCloudProgress(false);
-      }, 250);
+      }, 350);
     }
 
     showSaveStatus(
-      cloudUser
-        ? 'Progresso salvo e sincronizado'
-        : 'Progresso salvo localmente'
+      cloudUser ? 'Progresso salvo e sincronizado' : 'Progresso salvo localmente'
     );
   } catch (error) {
     console.warn('Não foi possível salvar o progresso:', error);
@@ -1014,87 +1034,94 @@ function saveProgress() {
 }
 
 async function loadCloudProgressAfterLogin() {
+  if (cloudLoading) return false;
+
   const user = cloudUser || await getCloudUser();
-  if (!user) return;
+  if (!user) return false;
+
+  cloudLoading = true;
 
   try {
     const { data, error } = await supabaseClient
       .from('study_progress')
-      .select('*')
+      .select(
+        'id,user_id,current_question,answers,submitted,checklist,study_log,updated_at'
+      )
       .eq('user_id', user.id)
       .maybeSingle();
 
     if (error) throw error;
 
+    /*
+      REGRA ABSOLUTA:
+      se existe progresso na nuvem, NÃO usamos o localStorage deste
+      navegador para decidir o estado. A nuvem vence.
+    */
+    if (data) {
+      applyCloudProgress(data);
+      cloudSyncReady = true;
+      showSaveStatus('☁️ Progresso restaurado da nuvem');
+      return true;
+    }
+
+    /*
+      Só chegamos aqui quando este usuário realmente ainda não possui
+      uma linha no Supabase.
+    */
     const localState = getLocalProgressSnapshot();
 
-    if (data && hasMeaningfulProgress(data)) {
-      applyCloudProgress(data);
-      showSaveStatus('Progresso da nuvem restaurado');
+    if (hasMeaningfulProgress(localState)) {
+      await saveCloudProgress(false);
+      showSaveStatus('☁️ Progresso deste dispositivo enviado para a nuvem');
     } else {
-      /* Se a nuvem estiver vazia e o PC possuir progresso,
-         preservamos o progresso local e enviamos para a nuvem. */
-      if (hasMeaningfulProgress(localState)) {
-        await saveCloudProgress(false);
-        showSaveStatus('Progresso deste dispositivo enviado para a nuvem');
-      } else if (!data) {
-        await saveCloudProgress(false);
-        showSaveStatus('Progresso inicial criado na nuvem');
-      } else {
-        applyCloudProgress(data);
-        showSaveStatus('Progresso sincronizado');
-      }
+      await saveCloudProgress(false);
+      showSaveStatus('☁️ Progresso inicial criado na nuvem');
     }
 
     cloudSyncReady = true;
+    return true;
+
   } catch (error) {
     console.error('Erro ao carregar progresso da nuvem:', error);
-    showSaveStatus('Nuvem indisponível • usando salvamento local');
+    showSaveStatus('⚠️ Não foi possível carregar a nuvem');
+    return false;
+  } finally {
+    cloudLoading = false;
   }
 }
 
-/* Timeline também passa a sincronizar */
+/* Timeline sincronizada */
 const _markStudyTodayCloud = markStudyToday;
 markStudyToday = function() {
   _markStudyTodayCloud();
-  if (cloudUser) {
+
+  if (cloudUser && !cloudLoading) {
     clearTimeout(cloudSyncTimer);
-    cloudSyncTimer = setTimeout(() => saveCloudProgress(false), 250);
+    cloudSyncTimer = setTimeout(() => saveCloudProgress(false), 350);
   }
 };
 
-/* Eventos de segurança para sincronização */
-window.addEventListener('beforeunload', () => {
-  if (cloudUser) {
-    saveCloudProgress(false);
-  }
-});
-
-document.addEventListener('visibilitychange', () => {
-  if (document.visibilityState === 'hidden' && cloudUser) {
-    saveCloudProgress(false);
-  }
-});
-
-/* Login: depois de autenticar, restaura a nuvem */
-const _loginOriginal = login;
+/* Login: autentica e só então carrega a nuvem. */
+const _loginOriginalCloud = login;
 login = async function() {
-  await _loginOriginal();
+  await _loginOriginalCloud();
 
-  const { data } = await supabaseClient.auth.getUser();
+  const user = await getCloudUser();
 
-  if (data?.user) {
-    cloudUser = data.user;
+  if (user) {
+    cloudUser = user;
     await loadCloudProgressAfterLogin();
     renderStudyTimeline();
     renderQuestion();
   }
 };
 
-/* Se a sessão já existir, sincroniza automaticamente */
+/* Restaura sessão existente. */
 (async function initializeCloudSync() {
   try {
-    const { data } = await supabaseClient.auth.getSession();
+    const { data, error } = await supabaseClient.auth.getSession();
+
+    if (error) throw error;
 
     if (data?.session?.user) {
       cloudUser = data.session.user;
@@ -1114,10 +1141,70 @@ login = async function() {
   }
 })();
 
-/* Se o Supabase detectar mudança de sessão, sincroniza novamente */
+/*
+  Quando a página volta a ficar visível, consulta a nuvem novamente.
+  Isso é importante para alternar entre PC/celular sem depender do cache.
+*/
+document.addEventListener('visibilitychange', async () => {
+  if (document.visibilityState === 'visible' && cloudUser) {
+    await loadCloudProgressAfterLogin();
+  }
+
+  if (document.visibilityState === 'hidden' && cloudUser && !cloudLoading) {
+    await saveCloudProgress(false);
+  }
+});
+
+window.addEventListener('pageshow', async () => {
+  if (cloudUser) {
+    await loadCloudProgressAfterLogin();
+  }
+});
+
+window.testCloudSync = async function() {
+  const user = cloudUser || await getCloudUser();
+
+  if (!user) {
+    console.error('Nenhum usuário autenticado.');
+    return;
+  }
+
+  const { data, error } = await supabaseClient
+    .from('study_progress')
+    .select('*')
+    .eq('user_id', user.id)
+    .maybeSingle();
+
+  console.log('☁️ SUPABASE USER:', user.id);
+  console.log('☁️ SUPABASE PROGRESS:', data);
+  console.log('☁️ SUPABASE ERROR:', error);
+
+  return { user, data, error };
+};
+
+/*
+  Se a sessão mudar, sincroniza novamente.
+*/
 supabaseClient.auth.onAuthStateChange(async (_event, session) => {
   if (session?.user) {
     cloudUser = session.user;
+
+    const loginScreen = document.getElementById('loginScreen');
+    const app = document.getElementById('app');
+
+    if (loginScreen) loginScreen.style.display = 'none';
+    if (app) app.style.display = 'block';
+
+    /*
+      Pequeno atraso evita concorrência com o fluxo de login e permite
+      que o estado de autenticação termine de estabilizar.
+    */
+    setTimeout(async () => {
+      await loadCloudProgressAfterLogin();
+      renderStudyTimeline();
+      renderQuestion();
+    }, 50);
+
   } else {
     cloudUser = null;
     cloudSyncReady = false;
