@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="pt-BR">
 
@@ -127,325 +126,21 @@ body.sidebar-hidden .container{max-width:1400px}
 @media(max-width:1000px){.hero,.grid2{grid-template-columns:1fr}.modules{grid-template-columns:repeat(2,1fr)}}
 @media(max-width:650px){.modules,.checklist{grid-template-columns:1fr}.navlinks{display:none}.hero{padding-top:35px}}
 
-/* =========================
-   LOGIN / AUTENTICAÇÃO
-========================= */
-.login-screen{
-  min-height:100vh;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  padding:24px;
-  background:
-    radial-gradient(circle at 50% 0%,rgba(56,189,248,.08),transparent 35%),
-    linear-gradient(180deg,#06101d,#091827 60%,#06101d);
-}
-.login-box{
-  width:min(430px,100%);
-  padding:34px;
-  background:linear-gradient(145deg,rgba(16,36,58,.98),rgba(9,25,42,.98));
-  border:1px solid var(--line);
-  border-radius:20px;
-  box-shadow:0 24px 70px rgba(0,0,0,.35);
-  text-align:center;
-}
-.login-box h1{margin:0 0 8px;font-size:34px}
-.login-box h1 span{color:var(--accent)}
-.login-box p{color:var(--muted);margin:0 0 22px}
-.login-box input{
-  width:100%;
-  display:block;
-  margin:10px 0;
-  padding:13px 14px;
-  border-radius:10px;
-  border:1px solid var(--line);
-  background:#071525;
-  color:var(--text);
-  outline:none;
-}
-.login-box input:focus{border-color:var(--accent2);box-shadow:0 0 0 3px rgba(56,189,248,.08)}
-.login-box button{
-  width:100%;
-  margin-top:10px;
-  padding:12px 15px;
-  border-radius:10px;
-  border:1px solid var(--line);
-  background:#0a192a;
-  color:var(--text);
-  font-weight:800;
-}
-.login-box button:first-of-type{
-  background:linear-gradient(90deg,#ff9900,#ffb84d);
-  color:#17100a;
-  border:0;
-}
-#loginMessage{min-height:22px;margin:14px 0 0!important;font-size:13px}
-
-/* =========================
-   LAYOUT CENTRALIZADO
-========================= */
-.container{width:100%;max-width:1180px;margin:0 auto;padding:0 28px 60px}
-.hero{width:100%;max-width:1180px;margin:0 auto;padding:54px 28px 30px;display:grid;grid-template-columns:1.4fr .6fr;gap:26px}
-
-@media(min-width:1101px){
-  .header,.hero,.container,footer{margin-left:250px}
-  .hero,.container{width:calc(100% - 250px);max-width:1180px;margin-right:auto}
-  .hero{padding-left:40px;padding-right:40px}
-  .container{padding-left:40px;padding-right:40px}
-}
-body.sidebar-hidden .header,body.sidebar-hidden .hero,body.sidebar-hidden .container,body.sidebar-hidden footer{margin-left:0}
-body.sidebar-hidden .hero,body.sidebar-hidden .container{width:100%;max-width:1180px;margin-left:auto;margin-right:auto}
-
-@media(max-width:1100px){
-  .study-sidebar{display:block;width:280px;transform:translateX(-100%)}
-  .study-sidebar.mobile-open{transform:translateX(0)}
-  .sidebar-toggle{left:0}
-  .study-sidebar.mobile-open + .sidebar-toggle{left:280px}
-  .header,.hero,.container,footer{margin-left:0}
-  .hero,.container{width:100%;max-width:1180px;margin-left:auto;margin-right:auto}
-}
-@media(max-width:650px){
-  .modules,.checklist{grid-template-columns:1fr}
-  .navlinks{display:none}
-  .hero{padding:35px 18px 25px;grid-template-columns:1fr}
-  .container{padding:0 18px 45px}
-  .login-box{padding:28px 20px}
-}
-
-/* =========================
-   LOGIN — CENTRALIZAÇÃO DINÂMICA
-========================= */
-html, body {
-    width: 100%;
-    min-height: 100%;
-    margin: 0;
-}
-
-.login-screen {
-    position: fixed;
-    inset: 0;
-    width: 100vw;
-    height: 100dvh;
-    min-height: 100vh;
-    display: grid;
-    place-items: center;
-    padding: clamp(16px, 4vw, 32px);
-    overflow: auto;
-    background:
-        radial-gradient(circle at 50% 20%, rgba(56,189,248,.10), transparent 36%),
-        linear-gradient(180deg, #06101d 0%, #091827 60%, #06101d 100%);
-}
-
-.login-box {
-    width: min(440px, calc(100vw - 32px));
-    margin: 0 auto;
-    padding: clamp(24px, 4vw, 36px);
-    text-align: center;
-    background: linear-gradient(145deg, rgba(16,36,58,.98), rgba(9,25,42,.98));
-    border: 1px solid var(--line);
-    border-radius: 20px;
-    box-shadow: 0 24px 70px rgba(0,0,0,.38);
-}
-
-.login-box h1 {
-    margin: 0 0 8px;
-    font-size: clamp(30px, 6vw, 38px);
-    line-height: 1.1;
-}
-
-.login-box p {
-    color: var(--muted);
-    margin: 0 0 22px;
-}
-
-.login-box input {
-    width: 100%;
-    height: 46px;
-    display: block;
-    margin: 10px 0;
-    padding: 0 14px;
-    border-radius: 10px;
-    border: 1px solid var(--line);
-    background: #071525;
-    color: var(--text);
-    outline: none;
-    font: inherit;
-}
-
-.login-box button {
-    width: 100%;
-    min-height: 46px;
-    margin-top: 10px;
-    padding: 11px 15px;
-    border-radius: 10px;
-    border: 1px solid var(--line);
-    background: #0a192a;
-    color: var(--text);
-    font-weight: 800;
-}
-
-.login-box button:first-of-type {
-    background: linear-gradient(90deg, #ff9900, #ffb84d);
-    color: #17100a;
-    border: 0;
-}
-
-#loginMessage {
-    min-height: 22px;
-    margin: 14px 0 0 !important;
-    font-size: 13px;
-}
-
-@media (max-width: 480px) {
-    .login-screen {
-        padding: 16px;
-    }
-
-    .login-box {
-        width: min(100%, 420px);
-        padding: 24px 18px;
-    }
-}
-
+/* ===== LOGIN E RESPONSIVIDADE FINAL ===== */
+.login-screen{position:fixed;inset:0;z-index:1000;min-height:100dvh;width:100%;display:flex;align-items:center;justify-content:center;padding:clamp(16px,4vw,40px);overflow:auto;background:radial-gradient(circle at 50% 18%,rgba(56,189,248,.12),transparent 32%),radial-gradient(circle at 85% 85%,rgba(255,153,0,.08),transparent 28%),linear-gradient(145deg,#040b14 0%,#071525 52%,#091827 100%)}
+.login-screen::before{content:"";position:absolute;width:min(72vw,700px);height:min(72vw,700px);border-radius:50%;border:1px solid rgba(56,189,248,.08);box-shadow:0 0 100px rgba(56,189,248,.06),inset 0 0 80px rgba(255,153,0,.025);pointer-events:none}
+.login-box{position:relative;width:min(100%,430px);padding:clamp(28px,5vw,44px);border:1px solid rgba(148,163,184,.18);border-radius:24px;background:linear-gradient(145deg,rgba(13,27,45,.97),rgba(7,17,31,.98));box-shadow:0 30px 90px rgba(0,0,0,.45),0 0 0 1px rgba(255,255,255,.02) inset;backdrop-filter:blur(18px);text-align:center}
+.login-box::before{content:"";display:block;width:58px;height:4px;margin:0 auto 22px;border-radius:99px;background:linear-gradient(90deg,#ff9900,#38bdf8)}
+.login-box h1{margin:0;color:#f8fbff;font-size:clamp(28px,6vw,38px);line-height:1.1;letter-spacing:-.7px}.login-box p:not(#loginMessage){margin:10px 0 26px;color:#9fb0c5;font-size:14px}
+.login-box input{display:block;width:100%;min-height:50px;margin:12px 0;padding:0 15px;border:1px solid #233b55;border-radius:12px;outline:none;background:#071525;color:#eef5ff;font-size:15px;transition:border-color .2s,box-shadow .2s}.login-box input::placeholder{color:#71859b}.login-box input:focus{border-color:#38bdf8;box-shadow:0 0 0 3px rgba(56,189,248,.10)}
+.login-box button{display:block;width:100%;min-height:50px;margin-top:12px;border-radius:12px;font-weight:800;transition:transform .18s,filter .18s}.login-box button:first-of-type{border:0;background:linear-gradient(90deg,#ff9900,#ffb84d);color:#17100a;box-shadow:0 10px 25px rgba(255,153,0,.16)}.login-box button:nth-of-type(2){border:1px solid #29435d;background:rgba(13,27,45,.7);color:#dbeafe}.login-box button:hover{transform:translateY(-1px);filter:brightness(1.06)}
+#loginMessage{min-height:20px;margin:14px 0 0!important;color:#fbbf24;font-size:13px}
+#app{min-height:100dvh;width:100%;overflow-x:hidden}#app .header,#app .hero,#app .container,#app footer{width:min(calc(100% - 40px),1180px);margin-left:auto;margin-right:auto}#app .hero{padding-left:0;padding-right:0}#app .container{padding-left:0;padding-right:0}
+@media(min-width:1101px){#app .header,#app .hero,#app .container,#app footer{width:min(calc(100% - 290px),1180px);margin-left:calc(250px + (100% - 250px - min(calc(100% - 290px),1180px))/2);margin-right:auto}body.sidebar-hidden #app .header,body.sidebar-hidden #app .hero,body.sidebar-hidden #app .container,body.sidebar-hidden #app footer{width:min(calc(100% - 40px),1180px);margin-left:auto;margin-right:auto}}
+@media(max-width:1100px){.study-sidebar{display:block;width:min(86vw,320px);padding:20px 16px;transform:translateX(-105%);box-shadow:18px 0 50px rgba(0,0,0,.42)}.study-sidebar:not(.collapsed){transform:translateX(0)}.sidebar-toggle{left:12px!important;top:14px;width:42px;height:42px;border-radius:11px;z-index:100;box-shadow:0 8px 25px rgba(0,0,0,.25)}body:not(.sidebar-hidden) .sidebar-toggle{left:min(calc(86vw + 12px),332px)!important}#app .nav{padding-left:60px}}
+@media(max-width:700px){.login-screen{padding:16px}.login-box{width:min(100%,390px);padding:28px 22px;border-radius:20px}#app .header,#app .hero,#app .container,#app footer{width:calc(100% - 24px)}#app .nav{padding:12px 0 12px 58px}.logo{font-size:14px}.hero{grid-template-columns:1fr!important;padding-top:30px!important;gap:16px}.hero h1{font-size:clamp(34px,12vw,52px)}.hero p{font-size:15px}.hero-card{padding:18px}.section-title{align-items:stretch;flex-direction:column;gap:12px}.search{width:100%}.panel{padding:17px}.grid2,.modules,.checklist{grid-template-columns:1fr!important}.quiz-card{padding:18px}.navquiz{flex-direction:column}.navquiz>div{width:100%}.navquiz button{flex:1}.exam-top{align-items:stretch}.progress{min-width:100%;order:3}h2{font-size:25px}table{min-width:620px}footer{padding-left:0!important;padding-right:0!important;font-size:12px}}
+@media(max-width:420px){.login-box{padding:24px 18px}.login-box h1{font-size:29px}#app .header,#app .hero,#app .container,#app footer{width:calc(100% - 18px)}.hero h1{font-size:34px}.primary,.study-btn,.ghost{padding:10px 12px}.navlinks{display:none}}
 </style>
-
-<style id="dynamic-centered-layout">
-
-/* ===== LAYOUT DINÂMICO E CENTRALIZADO ===== */
-
-html, body {
-    width: 100%;
-    min-height: 100%;
-    margin: 0;
-}
-
-body {
-    min-height: 100dvh;
-    overflow-x: hidden;
-}
-
-/* O conteúdo principal ocupa a área disponível e centraliza internamente */
-#app {
-    min-height: 100dvh;
-    width: 100%;
-    box-sizing: border-box;
-}
-
-/* Área principal: centralização dinâmica */
-#app .header,
-#app .hero,
-#app main,
-#app footer,
-#app .container {
-    width: min(100% - 40px, 1180px);
-    max-width: 1180px;
-    margin-left: auto;
-    margin-right: auto;
-    box-sizing: border-box;
-}
-
-/* Hero */
-#app .hero {
-    padding-left: 0;
-    padding-right: 0;
-}
-
-/* Conteúdo */
-#app main {
-    padding-left: 0;
-    padding-right: 0;
-}
-
-/* Cards, grids e seções nunca ultrapassam o container */
-#app .grid,
-#app .cards,
-#app .modules-grid,
-#app .comparison-grid,
-#app .checklist-grid,
-#app .quiz-grid {
-    max-width: 100%;
-    box-sizing: border-box;
-}
-
-/* Quando a sidebar está aberta em telas grandes:
-   o bloco inteiro continua centralizado na área restante */
-@media (min-width: 1101px) {
-    #app .header,
-    #app .hero,
-    #app main,
-    #app footer,
-    #app .container {
-        width: min(calc(100% - 290px), 1180px);
-        margin-left: calc(250px + (100% - 250px - min(calc(100% - 290px), 1180px)) / 2);
-        margin-right: auto;
-    }
-
-    /* Para viewport onde o container cabe com folga,
-       mantém o centro matemático da área útil */
-    #app .hero,
-    #app main,
-    #app .container {
-        padding-left: 0;
-        padding-right: 0;
-    }
-
-    /* Sidebar oculta: centro absoluto da viewport */
-    body.sidebar-hidden #app .header,
-    body.sidebar-hidden #app .hero,
-    body.sidebar-hidden #app main,
-    body.sidebar-hidden #app footer,
-    body.sidebar-hidden #app .container {
-        width: min(100% - 40px, 1180px);
-        margin-left: auto;
-        margin-right: auto;
-    }
-}
-
-/* Tablets */
-@media (max-width: 1100px) {
-    #app .header,
-    #app .hero,
-    #app main,
-    #app footer,
-    #app .container {
-        width: min(100% - 36px, 1180px);
-        margin-left: auto;
-        margin-right: auto;
-    }
-}
-
-/* Celular */
-@media (max-width: 650px) {
-    #app .header,
-    #app .hero,
-    #app main,
-    #app footer,
-    #app .container {
-        width: calc(100% - 24px);
-        margin-left: auto;
-        margin-right: auto;
-    }
-
-    #app .hero {
-        padding-top: 28px;
-    }
-}
-
-/* Segurança contra elementos largos */
-#app img,
-#app video,
-#app iframe,
-#app table {
-    max-width: 100%;
-}
-
-#app table {
-    display: block;
-    overflow-x: auto;
-}
-
-</style>
-
 </head>
 <body>
 <div id="loginScreen" class="login-screen">
@@ -480,7 +175,7 @@ body {
     </div>
 </div>
 
-<div id="app" style="display:none;">
+<div id="app" style="display:none">
 <aside class="study-sidebar" id="studySidebar">
   <div class="git-title">study <span>timeline</span></div>
   <div class="git-subtitle">ESTILO GIT • HISTÓRICO DE ESTUDOS</div>
@@ -704,7 +399,7 @@ body {
   <a href="https://docs.aws.amazon.com/wellarchitected/latest/framework/welcome.html" target="_blank">Well-Architected Framework</a>
 </footer>
 
-</div> <!-- /app -->
+</div>
 
 <script>
 const questions = [{"q": "Uma empresa quer pagar pelos recursos de computação conforme o consumo, evitando grande investimento inicial em hardware. Qual conceito melhor descreve esse modelo?", "options": ["CapEx", "OpEx", "Economia de escala", "Tolerância a falhas"], "answer": "B", "explanation": "OpEx transforma gastos de infraestrutura em despesas operacionais variáveis conforme o uso."}, {"q": "Uma aplicação precisa aumentar e diminuir sua capacidade automaticamente conforme a demanda. Qual conceito está mais diretamente relacionado?", "options": ["Elasticidade", "Durabilidade", "Latência", "Governança"], "answer": "A", "explanation": "Elasticidade é a capacidade de ajustar recursos de acordo com a demanda."}, {"q": "Qual componente da infraestrutura global da AWS é formado por uma ou mais instalações físicas isoladas dentro de uma Region?", "options": ["Edge Location", "Availability Zone", "Local Zone", "Wavelength Zone"], "answer": "B", "explanation": "Availability Zones são locais isolados dentro de uma Region."}, {"q": "Qual serviço é usado principalmente para distribuir conteúdo com baixa latência por uma rede global de pontos de presença?", "options": ["Amazon Route 53", "Amazon CloudFront", "AWS Direct Connect", "Amazon RDS"], "answer": "B", "explanation": "CloudFront é a CDN da AWS e usa uma rede global de edge locations."}, {"q": "Uma aplicação precisa de uma identidade temporária para acessar recursos AWS sem armazenar credenciais permanentes no código. Qual recurso é mais apropriado?", "options": ["IAM Role", "IAM Group", "IAM User", "Access key fixa"], "answer": "A", "explanation": "IAM Roles fornecem credenciais temporárias por meio de serviços como STS."}, {"q": "Qual princípio de segurança recomenda conceder somente as permissões necessárias para realizar uma tarefa?", "options": ["Defense in depth", "Least privilege", "Shared tenancy", "Fault tolerance"], "answer": "B", "explanation": "Least privilege reduz permissões ao mínimo necessário."}, {"q": "Uma empresa quer registrar chamadas de API e ações realizadas na conta AWS para auditoria. Qual serviço deve ser usado?", "options": ["CloudWatch", "CloudTrail", "AWS Config", "Trusted Advisor"], "answer": "B", "explanation": "CloudTrail registra atividade de API e eventos relacionados."}, {"q": "Qual serviço fornece métricas, logs e alarmes para monitoramento operacional?", "options": ["CloudWatch", "CloudTrail", "IAM", "AWS Organizations"], "answer": "A", "explanation": "CloudWatch é voltado ao monitoramento de métricas, logs e alarmes."}, {"q": "Qual serviço oferece máquinas virtuais configuráveis na AWS?", "options": ["Amazon EC2", "AWS Lambda", "Amazon S3", "Amazon SQS"], "answer": "A", "explanation": "EC2 fornece capacidade computacional baseada em instâncias virtuais."}, {"q": "Qual modelo de compra é adequado quando a carga é variável e não há compromisso de longo prazo?", "options": ["Spot obrigatório", "On-Demand", "Reserved Instance obrigatória", "Savings Plan obrigatório"], "answer": "B", "explanation": "On-Demand é indicado quando flexibilidade é prioridade e não há compromisso."}, {"q": "Qual opção pode oferecer grande desconto para cargas que podem ser interrompidas?", "options": ["Spot Instances", "On-Demand", "Dedicated Hosts", "Elastic IP"], "answer": "A", "explanation": "Spot usa capacidade excedente da AWS e pode sofrer interrupções."}, {"q": "Qual serviço é um armazenamento de objetos?", "options": ["Amazon S3", "Amazon EBS", "Amazon EFS", "Amazon EC2"], "answer": "A", "explanation": "S3 é armazenamento de objetos."}, {"q": "Uma empresa precisa compartilhar um sistema de arquivos entre várias instâncias Linux. Qual serviço é mais apropriado?", "options": ["Amazon EFS", "Amazon S3", "Amazon EBS", "Instance Store"], "answer": "A", "explanation": "EFS fornece armazenamento de arquivos compartilhável via NFS."}, {"q": "Qual característica diferencia o EBS do S3?", "options": ["EBS é object storage global", "EBS fornece volumes de bloco para instâncias", "EBS é uma CDN", "EBS é uma fila"], "answer": "B", "explanation": "EBS é armazenamento de blocos normalmente associado a EC2."}, {"q": "Qual classe do S3 é projetada para dados acessados com frequência?", "options": ["S3 Standard", "S3 Glacier Deep Archive", "S3 One Zone-IA", "S3 Glacier Flexible Retrieval"], "answer": "A", "explanation": "S3 Standard é a classe de uso geral para acesso frequente."}, {"q": "Qual serviço é um banco relacional gerenciado?", "options": ["Amazon RDS", "Amazon DynamoDB", "Amazon ElastiCache", "Amazon S3"], "answer": "A", "explanation": "RDS é um serviço gerenciado para bancos relacionais."}, {"q": "Qual serviço é um banco NoSQL de chave-valor e documentos?", "options": ["Amazon DynamoDB", "Amazon RDS", "Amazon Redshift", "Amazon Neptune"], "answer": "A", "explanation": "DynamoDB é um banco NoSQL gerenciado com modelos key-value e document."}, {"q": "Uma empresa precisa de um data warehouse analítico. Qual serviço atende diretamente esse caso?", "options": ["Amazon Redshift", "Amazon RDS", "Amazon DynamoDB", "Amazon EFS"], "answer": "A", "explanation": "Redshift é o serviço de data warehouse da AWS."}, {"q": "Qual serviço é destinado a bancos de dados em memória/cache?", "options": ["Amazon ElastiCache", "Amazon Redshift", "Amazon Neptune", "Amazon S3"], "answer": "A", "explanation": "ElastiCache fornece caches gerenciados em memória."}, {"q": "Qual componente permite que recursos em uma subnet privada saiam para a internet sem aceitar conexões iniciadas diretamente da internet?", "options": ["Internet Gateway", "NAT Gateway", "Route 53", "VPC Peering"], "answer": "B", "explanation": "NAT Gateway permite saída para a internet a partir de recursos privados, quando configurado adequadamente."}, {"q": "Qual é uma característica típica de Security Groups?", "options": ["São stateful", "São aplicados somente a roteadores", "Não possuem regras", "São serviços de DNS"], "answer": "A", "explanation": "Security Groups são stateful e atuam como firewall virtual para recursos como EC2."}, {"q": "Qual serviço fornece DNS gerenciado?", "options": ["Amazon Route 53", "Amazon CloudFront", "AWS WAF", "AWS Shield"], "answer": "A", "explanation": "Route 53 fornece DNS e recursos relacionados a tráfego e domínio."}, {"q": "Uma arquitetura precisa desacoplar produtores e consumidores usando uma fila. Qual serviço é o mais direto?", "options": ["Amazon SQS", "Amazon SNS", "Amazon Route 53", "Amazon CloudFront"], "answer": "A", "explanation": "SQS fornece filas para desacoplamento entre componentes."}, {"q": "Uma aplicação precisa enviar uma mensagem para vários assinantes. Qual padrão é atendido diretamente pelo SNS?", "options": ["Fan-out", "Block storage", "DNS failover", "Object lifecycle"], "answer": "A", "explanation": "SNS pode publicar uma mensagem para múltiplos subscribers, implementando fan-out."}, {"q": "Qual serviço permite reagir a eventos de diferentes fontes usando regras e destinos?", "options": ["Amazon EventBridge", "Amazon EBS", "Amazon EFS", "Amazon Inspector"], "answer": "A", "explanation": "EventBridge é um barramento de eventos para arquiteturas orientadas a eventos."}, {"q": "Qual serviço fornece funções serverless executadas em resposta a eventos?", "options": ["AWS Lambda", "Amazon EC2", "Amazon EBS", "Amazon RDS"], "answer": "A", "explanation": "Lambda executa código sem que o cliente gerencie servidores."}, {"q": "Qual serviço é usado para orquestrar workflows com estados?", "options": ["AWS Step Functions", "Amazon SQS", "Amazon S3", "Amazon Route 53"], "answer": "A", "explanation": "Step Functions coordena workflows por meio de máquinas de estado."}, {"q": "Qual ferramenta ajuda a estimar o custo de uma arquitetura antes da implementação?", "options": ["AWS Pricing Calculator", "AWS Cost Explorer", "AWS Budgets", "AWS CloudTrail"], "answer": "A", "explanation": "Pricing Calculator estima custos de arquiteturas e serviços."}, {"q": "Qual ferramenta permite analisar gastos históricos e tendências de custo?", "options": ["Cost Explorer", "Pricing Calculator", "IAM", "AWS Config"], "answer": "A", "explanation": "Cost Explorer permite visualizar e analisar custos e uso."}, {"q": "Qual serviço pode emitir alertas quando o gasto ou uso ultrapassa um limite definido?", "options": ["AWS Budgets", "Amazon GuardDuty", "CloudTrail", "Route 53"], "answer": "A", "explanation": "AWS Budgets permite criar orçamentos e alertas."}, {"q": "Qual pilar do Well-Architected Framework trata diretamente da proteção de dados e sistemas?", "options": ["Security", "Sustainability", "Cost Optimization", "Performance Efficiency"], "answer": "A", "explanation": "Security é o pilar dedicado à proteção da informação e dos sistemas."}, {"q": "Qual pilar enfatiza capacidade de executar workloads de maneira eficiente, evoluindo processos e operações?", "options": ["Operational Excellence", "Security", "Sustainability", "Cost Optimization"], "answer": "A", "explanation": "Operational Excellence trata da execução e melhoria contínua das operações."}, {"q": "Qual pilar se concentra em recuperar-se de falhas e atender requisitos de disponibilidade?", "options": ["Reliability", "Cost Optimization", "Security", "Sustainability"], "answer": "A", "explanation": "Reliability trata de recuperação, resiliência e atendimento consistente às demandas."}, {"q": "Qual serviço ajuda a detectar atividades potencialmente maliciosas e ameaças na conta AWS?", "options": ["Amazon GuardDuty", "Amazon Polly", "Amazon Redshift", "Amazon EFS"], "answer": "A", "explanation": "GuardDuty é um serviço gerenciado de detecção de ameaças."}, {"q": "Qual serviço ajuda a avaliar vulnerabilidades de workloads?", "options": ["Amazon Inspector", "Amazon GuardDuty", "Amazon Route 53", "AWS Budgets"], "answer": "A", "explanation": "Inspector é voltado à avaliação de vulnerabilidades em workloads suportados."}, {"q": "Qual serviço ajuda a proteger aplicações web contra ataques em nível de aplicação?", "options": ["AWS WAF", "AWS Shield", "AWS KMS", "AWS STS"], "answer": "A", "explanation": "WAF permite regras para filtrar e controlar tráfego HTTP(S) de aplicações."}, {"q": "Qual serviço fornece proteção gerenciada contra ataques DDoS?", "options": ["AWS Shield", "AWS WAF", "Amazon Inspector", "IAM"], "answer": "A", "explanation": "Shield é o serviço de proteção contra DDoS da AWS."}, {"q": "Qual serviço gerencia chaves criptográficas?", "options": ["AWS KMS", "AWS Secrets Manager", "AWS CloudTrail", "Amazon Macie"], "answer": "A", "explanation": "KMS gerencia chaves usadas para criptografia."}, {"q": "Qual serviço é voltado ao armazenamento e gerenciamento de segredos como credenciais?", "options": ["AWS Secrets Manager", "AWS KMS", "Amazon S3", "CloudWatch"], "answer": "A", "explanation": "Secrets Manager armazena, recupera e pode ajudar a rotacionar segredos."}, {"q": "Qual serviço fornece Kubernetes gerenciado?", "options": ["Amazon EKS", "Amazon ECS", "AWS Fargate", "Amazon ECR"], "answer": "A", "explanation": "EKS é o serviço gerenciado de Kubernetes."}, {"q": "Qual serviço é o registry de imagens de containers da AWS?", "options": ["Amazon ECR", "Amazon ECS", "Amazon EKS", "AWS Lambda"], "answer": "A", "explanation": "ECR armazena e gerencia imagens de containers."}, {"q": "Qual opção permite executar containers sem gerenciar servidores?", "options": ["AWS Fargate", "Amazon ECR", "Amazon Route 53", "Amazon EBS"], "answer": "A", "explanation": "Fargate é uma tecnologia serverless para execução de containers em ECS/EKS."}, {"q": "Qual serviço fornece um container orchestration service nativo da AWS?", "options": ["Amazon ECS", "Amazon ECR", "Amazon RDS", "Amazon SQS"], "answer": "A", "explanation": "ECS é o serviço de orquestração de containers da AWS."}, {"q": "Qual serviço de IA pode extrair texto de documentos e imagens?", "options": ["Amazon Textract", "Amazon Polly", "Amazon Transcribe", "Amazon Translate"], "answer": "A", "explanation": "Textract extrai texto e dados de documentos."}, {"q": "Qual serviço converte fala em texto?", "options": ["Amazon Transcribe", "Amazon Polly", "Amazon Textract", "Amazon Translate"], "answer": "A", "explanation": "Transcribe realiza speech-to-text."}, {"q": "Qual serviço converte texto em fala?", "options": ["Amazon Polly", "Amazon Transcribe", "Amazon Comprehend", "Amazon Rekognition"], "answer": "A", "explanation": "Polly realiza text-to-speech."}, {"q": "Qual serviço fornece modelos fundacionais e recursos para aplicações generativas de IA?", "options": ["Amazon Bedrock", "Amazon Redshift", "Amazon Neptune", "Amazon EFS"], "answer": "A", "explanation": "Bedrock oferece acesso a modelos fundacionais por APIs gerenciadas."}, {"q": "Qual serviço é voltado à criação, treinamento e implantação de modelos de machine learning?", "options": ["Amazon SageMaker", "Amazon Bedrock", "Amazon Polly", "Amazon SQS"], "answer": "A", "explanation": "SageMaker é a plataforma de ML da AWS."}, {"q": "Qual serviço é usado para conectar uma VPC a uma rede on-premises por uma conexão dedicada?", "options": ["AWS Direct Connect", "NAT Gateway", "Internet Gateway", "VPC Peering"], "answer": "A", "explanation": "Direct Connect fornece conectividade dedicada entre ambientes e AWS."}, {"q": "Qual opção conecta VPCs diretamente por uma conexão de rede entre elas?", "options": ["VPC Peering", "CloudFront", "Route 53", "AWS WAF"], "answer": "A", "explanation": "VPC Peering estabelece conectividade privada entre VPCs."}, {"q": "Qual serviço simplifica a conexão de múltiplas VPCs e redes por um hub central?", "options": ["AWS Transit Gateway", "VPC Peering", "NAT Gateway", "Internet Gateway"], "answer": "A", "explanation": "Transit Gateway funciona como hub para conectar VPCs e redes."}, {"q": "Qual mecanismo fornece conectividade privada a serviços AWS sem precisar atravessar a internet pública?", "options": ["VPC Endpoint", "Internet Gateway", "Elastic IP", "CloudFront"], "answer": "A", "explanation": "VPC Endpoints permitem acesso privado a serviços suportados."}, {"q": "Qual serviço fornece auditoria de configurações e avaliação de conformidade de recursos?", "options": ["AWS Config", "CloudWatch", "CloudTrail", "Cost Explorer"], "answer": "A", "explanation": "Config registra e avalia configurações de recursos ao longo do tempo."}, {"q": "Qual serviço fornece recomendações sobre otimização, segurança, desempenho e custos?", "options": ["AWS Trusted Advisor", "AWS Config", "AWS CloudTrail", "Amazon Route 53"], "answer": "A", "explanation": "Trusted Advisor fornece verificações e recomendações em várias categorias."}, {"q": "Qual serviço organiza múltiplas contas AWS centralmente?", "options": ["AWS Organizations", "AWS IAM", "Amazon SQS", "AWS Lambda"], "answer": "A", "explanation": "Organizations permite gerenciar múltiplas contas de forma centralizada."}, {"q": "Qual mecanismo permite aplicar controles de permissões máximas a contas dentro de Organizations?", "options": ["Service Control Policies", "IAM Groups", "Security Groups", "Route Tables"], "answer": "A", "explanation": "SCPs definem limites de permissões para contas/OU, sem conceder permissões por si mesmas."}, {"q": "Qual ferramenta é apropriada para prever o custo de uma nova arquitetura antes de implantá-la?", "options": ["AWS Pricing Calculator", "Cost Explorer", "CloudTrail", "AWS Config"], "answer": "A", "explanation": "Pricing Calculator é usada para estimativas antes da implementação."}, {"q": "Qual serviço é voltado a mover bancos de dados para a AWS minimizando mudanças na aplicação?", "options": ["AWS Database Migration Service", "AWS Migration Hub", "AWS DataSync", "AWS Snowball"], "answer": "A", "explanation": "DMS é usado para migração de bancos de dados."}, {"q": "Qual estratégia dos 6 Rs mantém uma aplicação essencialmente como está, sem migração imediata?", "options": ["Retain", "Rehost", "Refactor", "Repurchase"], "answer": "A", "explanation": "Retain significa manter o workload no ambiente atual por enquanto."}, {"q": "Qual estratégia move uma aplicação para a nuvem com poucas ou nenhuma alteração?", "options": ["Rehost", "Refactor", "Repurchase", "Retire"], "answer": "A", "explanation": "Rehost é frequentemente descrito como lift-and-shift."}, {"q": "Qual estratégia envolve modificar a arquitetura da aplicação de forma significativa para aproveitar recursos cloud-native?", "options": ["Refactor", "Retain", "Rehost", "Retire"], "answer": "A", "explanation": "Refactor envolve reestruturar a aplicação para aproveitar melhor a nuvem."}, {"q": "Qual serviço oferece armazenamento de objetos com alta durabilidade e classes de armazenamento?", "options": ["Amazon S3", "Amazon EFS", "Amazon EBS", "Amazon EC2"], "answer": "A", "explanation": "S3 é o principal serviço de object storage da AWS."}, {"q": "Qual diferença é mais adequada entre Authentication e Authorization?", "options": ["Authentication verifica identidade; Authorization determina permissões", "Authentication define preço; Authorization define região", "Ambas significam exatamente a mesma coisa", "Authorization ocorre antes da identidade"], "answer": "A", "explanation": "Autenticação verifica quem é o principal; autorização determina o que ele pode fazer."}, {"q": "Qual afirmação melhor diferencia CloudWatch e CloudTrail?", "options": ["CloudWatch monitora métricas/logs; CloudTrail registra atividade de API", "CloudWatch é IAM; CloudTrail é DNS", "CloudWatch substitui VPC; CloudTrail substitui S3", "São o mesmo serviço"], "answer": "A", "explanation": "CloudWatch é observabilidade/monitoramento; CloudTrail é auditoria de atividade."}, {"q": "Qual combinação representa corretamente armazenamento de bloco, arquivo e objeto?", "options": ["EBS, EFS, S3", "S3, EBS, EFS", "EFS, S3, EBS", "RDS, EFS, SQS"], "answer": "A", "explanation": "EBS = bloco; EFS = arquivo; S3 = objetos."}];
@@ -878,6 +573,19 @@ function restoreSidebarState() {
 
 restoreSidebarState();
 
+function applyResponsiveSidebarDefault() {
+  if (window.innerWidth <= 1100 && !localStorage.getItem('clf_sidebar_hidden')) {
+    const sidebar = document.getElementById('studySidebar');
+    const btn = document.getElementById('sidebarToggle');
+    sidebar.classList.add('collapsed');
+    document.body.classList.add('sidebar-hidden');
+    btn.textContent = '›';
+    btn.title = 'Mostrar barra lateral';
+    btn.setAttribute('aria-label', btn.title);
+  }
+}
+applyResponsiveSidebarDefault();
+
 // =============================
 // PERSISTÊNCIA DE PROGRESSO
 // =============================
@@ -1030,6 +738,7 @@ clearBtn.onclick = clearProgress;
 clearBtn.style.marginBottom = '14px';
 simPanel.insertBefore(clearBtn, simPanel.firstChild);
 </script>
+
 <script>
 
 async function createAccount() {
@@ -1125,29 +834,296 @@ async function login() {
         'loginScreen'
     ).style.display = 'none';
 
-    showApp();
+    // Mostra curso
+    document.getElementById(
+        'app'
+    ).style.display = 'block';
+
 }
-
-function showApp() {
-    document.getElementById('loginScreen').style.display = 'none';
-    document.getElementById('app').style.display = 'block';
-}
-
-async function restoreSession() {
-    const { data, error } = await supabaseClient.auth.getSession();
-
-    if (error) {
-        console.error('Erro ao recuperar sessão:', error);
-        return;
-    }
-
-    if (data && data.session) {
-        showApp();
-    }
-}
-
-restoreSession();
 
 </script>
+
+<script id="cloud-sync-final">
+/* =========================================================
+   SINCRONIZAÇÃO REAL COM SUPABASE
+   PC <-> CELULAR
+   ========================================================= */
+let cloudUser = null;
+let cloudSyncTimer = null;
+let cloudSyncReady = false;
+
+function getLocalProgressSnapshot() {
+  let checklist = [];
+  document.querySelectorAll('#checklist input[type="checkbox"]').forEach(x => checklist.push(!!x.checked));
+
+  return {
+    current_question: Number.isInteger(current) ? current : 0,
+    answers: Array.isArray(answers) ? answers : [],
+    submitted: Array.isArray(submitted) ? submitted : [],
+    checklist,
+    study_log: getStudyLog(),
+    updated_at: new Date().toISOString()
+  };
+}
+
+function hasMeaningfulProgress(state) {
+  if (!state) return false;
+
+  const answered = Array.isArray(state.answers)
+    ? state.answers.some(v => v !== null && v !== undefined && v !== '')
+    : false;
+
+  const checked = Array.isArray(state.checklist)
+    ? state.checklist.some(Boolean)
+    : false;
+
+  const submittedAny = Array.isArray(state.submitted)
+    ? state.submitted.some(Boolean)
+    : false;
+
+  const timelineAny = state.study_log && Object.keys(state.study_log).length > 0;
+
+  return answered || checked || submittedAny || timelineAny ||
+         (Number.isInteger(state.current_question) && state.current_question > 0);
+}
+
+function applyCloudProgress(data) {
+  if (!data) return;
+
+  if (Array.isArray(data.answers) && data.answers.length === questions.length) {
+    answers = data.answers;
+  }
+
+  if (Array.isArray(data.submitted) && data.submitted.length === questions.length) {
+    submitted = data.submitted;
+  }
+
+  if (
+    Number.isInteger(data.current_question) &&
+    data.current_question >= 0 &&
+    data.current_question < questions.length
+  ) {
+    current = data.current_question;
+  }
+
+  if (Array.isArray(data.checklist)) {
+    const boxes = document.querySelectorAll('#checklist input[type="checkbox"]');
+    boxes.forEach((box, i) => {
+      box.checked = !!data.checklist[i];
+    });
+  }
+
+  if (data.study_log && typeof data.study_log === 'object') {
+    localStorage.setItem(STUDY_LOG_KEY, JSON.stringify(data.study_log));
+    renderStudyTimeline();
+  }
+
+  localStorage.setItem(STORAGE_KEY, JSON.stringify({
+    current,
+    answers,
+    submitted,
+    checklist: Array.from(
+      document.querySelectorAll('#checklist input[type="checkbox"]')
+    ).map(x => x.checked),
+    savedAt: data.updated_at || new Date().toISOString()
+  }));
+
+  renderQuestion();
+}
+
+async function getCloudUser() {
+  try {
+    const { data, error } = await supabaseClient.auth.getUser();
+    if (error) throw error;
+    cloudUser = data?.user || null;
+    return cloudUser;
+  } catch (error) {
+    console.error('Erro ao obter usuário do Supabase:', error);
+    return null;
+  }
+}
+
+async function saveCloudProgress(showStatus = true) {
+  try {
+    const user = cloudUser || await getCloudUser();
+    if (!user) return false;
+
+    const state = getLocalProgressSnapshot();
+
+    const { error } = await supabaseClient
+      .from('study_progress')
+      .upsert({
+        user_id: user.id,
+        current_question: state.current_question,
+        answers: state.answers,
+        submitted: state.submitted,
+        checklist: state.checklist,
+        study_log: state.study_log,
+        updated_at: state.updated_at
+      }, {
+        onConflict: 'user_id'
+      });
+
+    if (error) throw error;
+
+    cloudSyncReady = true;
+
+    if (showStatus) {
+      showSaveStatus('Progresso sincronizado com a nuvem');
+    }
+
+    return true;
+  } catch (error) {
+    console.error('Erro ao sincronizar progresso:', error);
+
+    if (showStatus) {
+      showSaveStatus('Salvo localmente • aguardando sincronização');
+    }
+
+    return false;
+  }
+}
+
+function saveProgress() {
+  try {
+    const state = getLocalProgressSnapshot();
+
+    localStorage.setItem(STORAGE_KEY, JSON.stringify({
+      current: state.current_question,
+      answers: state.answers,
+      submitted: state.submitted,
+      checklist: state.checklist,
+      savedAt: state.updated_at
+    }));
+
+    if (cloudUser) {
+      clearTimeout(cloudSyncTimer);
+      cloudSyncTimer = setTimeout(() => {
+        saveCloudProgress(false);
+      }, 250);
+    }
+
+    showSaveStatus(
+      cloudUser
+        ? 'Progresso salvo e sincronizado'
+        : 'Progresso salvo localmente'
+    );
+  } catch (error) {
+    console.warn('Não foi possível salvar o progresso:', error);
+  }
+}
+
+async function loadCloudProgressAfterLogin() {
+  const user = cloudUser || await getCloudUser();
+  if (!user) return;
+
+  try {
+    const { data, error } = await supabaseClient
+      .from('study_progress')
+      .select('*')
+      .eq('user_id', user.id)
+      .maybeSingle();
+
+    if (error) throw error;
+
+    const localState = getLocalProgressSnapshot();
+
+    if (data && hasMeaningfulProgress(data)) {
+      applyCloudProgress(data);
+      showSaveStatus('Progresso da nuvem restaurado');
+    } else {
+      /* Se a nuvem estiver vazia e o PC possuir progresso,
+         preservamos o progresso local e enviamos para a nuvem. */
+      if (hasMeaningfulProgress(localState)) {
+        await saveCloudProgress(false);
+        showSaveStatus('Progresso deste dispositivo enviado para a nuvem');
+      } else if (!data) {
+        await saveCloudProgress(false);
+        showSaveStatus('Progresso inicial criado na nuvem');
+      } else {
+        applyCloudProgress(data);
+        showSaveStatus('Progresso sincronizado');
+      }
+    }
+
+    cloudSyncReady = true;
+  } catch (error) {
+    console.error('Erro ao carregar progresso da nuvem:', error);
+    showSaveStatus('Nuvem indisponível • usando salvamento local');
+  }
+}
+
+/* Timeline também passa a sincronizar */
+const _markStudyTodayCloud = markStudyToday;
+markStudyToday = function() {
+  _markStudyTodayCloud();
+  if (cloudUser) {
+    clearTimeout(cloudSyncTimer);
+    cloudSyncTimer = setTimeout(() => saveCloudProgress(false), 250);
+  }
+};
+
+/* Eventos de segurança para sincronização */
+window.addEventListener('beforeunload', () => {
+  if (cloudUser) {
+    saveCloudProgress(false);
+  }
+});
+
+document.addEventListener('visibilitychange', () => {
+  if (document.visibilityState === 'hidden' && cloudUser) {
+    saveCloudProgress(false);
+  }
+});
+
+/* Login: depois de autenticar, restaura a nuvem */
+const _loginOriginal = login;
+login = async function() {
+  await _loginOriginal();
+
+  const { data } = await supabaseClient.auth.getUser();
+
+  if (data?.user) {
+    cloudUser = data.user;
+    await loadCloudProgressAfterLogin();
+    renderStudyTimeline();
+    renderQuestion();
+  }
+};
+
+/* Se a sessão já existir, sincroniza automaticamente */
+(async function initializeCloudSync() {
+  try {
+    const { data } = await supabaseClient.auth.getSession();
+
+    if (data?.session?.user) {
+      cloudUser = data.session.user;
+
+      const loginScreen = document.getElementById('loginScreen');
+      const app = document.getElementById('app');
+
+      if (loginScreen) loginScreen.style.display = 'none';
+      if (app) app.style.display = 'block';
+
+      await loadCloudProgressAfterLogin();
+      renderStudyTimeline();
+      renderQuestion();
+    }
+  } catch (error) {
+    console.error('Erro ao restaurar sessão:', error);
+  }
+})();
+
+/* Se o Supabase detectar mudança de sessão, sincroniza novamente */
+supabaseClient.auth.onAuthStateChange(async (_event, session) => {
+  if (session?.user) {
+    cloudUser = session.user;
+  } else {
+    cloudUser = null;
+    cloudSyncReady = false;
+  }
+});
+</script>
+
 </body>
 </html>
