@@ -1068,18 +1068,40 @@ async function loadCloudProgressAfterLogin() {
       Só chegamos aqui quando este usuário realmente ainda não possui
       uma linha no Supabase.
     */
+    /*
+      IMPORTANTE: cloudLoading ainda está true neste ponto.
+      Portanto NÃO chamamos saveCloudProgress(), pois ele bloqueia
+      chamadas durante o carregamento. Fazemos o primeiro UPSERT
+      diretamente aqui.
+    */
     const localState = getLocalProgressSnapshot();
+    const initialState = {
+      user_id: user.id,
+      current_question: localState.current_question,
+      answers: localState.answers,
+      submitted: localState.submitted,
+      checklist: localState.checklist,
+      study_log: localState.study_log,
+      updated_at: new Date().toISOString()
+    };
 
-    if (hasMeaningfulProgress(localState)) {
-      await saveCloudProgress(false);
-      showSaveStatus('☁️ Progresso deste dispositivo enviado para a nuvem');
-    } else {
-      await saveCloudProgress(false);
-      showSaveStatus('☁️ Progresso inicial criado na nuvem');
-    }
+    const { data: createdData, error: createError } =
+      await supabaseClient
+        .from('study_progress')
+        .upsert(initialState, { onConflict: 'user_id' })
+        .select()
+        .single();
+
+    if (createError) throw createError;
 
     cloudSyncReady = true;
-    return true;
+    showSaveStatus(
+      hasMeaningfulProgress(localState)
+        ? '☁️ Progresso deste dispositivo enviado para a nuvem'
+        : '☁️ Progresso inicial criado na nuvem'
+    );
+
+    return !!createdData;
 
   } catch (error) {
     console.error('Erro ao carregar progresso da nuvem:', error);
